@@ -1,0 +1,86 @@
+package com.cts.controller;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.cts.dto.BikeDto;
+import com.cts.entities.Bike;
+import com.cts.service.BikeService;
+
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping("/api/bikes")
+public class BikeController {
+
+	private BikeService bikeService;
+
+	public BikeController(BikeService bikeService) {
+		super();
+		this.bikeService = bikeService;
+	}
+
+	@GetMapping
+	public List<BikeDto> getAll() {
+		return bikeService.getAll();
+	}
+
+	@GetMapping("/{id}")
+	public BikeDto getById(@PathVariable long id) {
+		return bikeService.getById(id);
+	}
+
+	@PostMapping("/save")
+	public ResponseEntity<Bike> addBike(@Valid @RequestBody BikeDto bikeDto) {
+	    if (bikeDto == null || bikeDto.getCustomer() == null) {
+	        return ResponseEntity.badRequest().build();
+	    }
+
+	    Bike savedBike = bikeService.addBike(bikeDto);
+	    return ResponseEntity.status(HttpStatus.CREATED).body(savedBike);
+	}
+
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<Bike> updateBike(@PathVariable long id, @Valid @RequestBody BikeDto bikeDto) {
+	    if (bikeDto == null) {
+	        return ResponseEntity.badRequest().build();
+	    }
+
+	    Bike bike = new Bike();
+	    bike.setBikeMake(bikeDto.getBikeMake());
+	    bike.setModelName(bikeDto.getModelName());
+	    bike.setBikeRegistrationNumber(bikeDto.getBikeRegistrationNumber());
+	    bike.setBikeChassisNumber(bikeDto.getBikeChassisNumber());
+	    bike.setKnownIssues(bikeDto.getKnownIssues());
+	    bike.setCost(bikeDto.getCost());
+	    bike.setGivenDate(bikeDto.getGivenDate());
+	    bike.setExpectedDeliveryDate(bikeDto.getExpectedDeliveryDate());
+	    bike.setCreatedDateAndTime(bikeDto.getCreatedDateAndTime());
+	    bike.setUpdatedDateAndTime(LocalDateTime.now());
+	    bike.setCustomer(bikeDto.getCustomer());
+
+	    Bike updatedBike = bikeService.updateBike(id, bike);
+	    return ResponseEntity.ok(updatedBike);
+	}
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<Void> deleteBike(@PathVariable long id) {
+	    bikeService.deleteBike(id);
+	    return ResponseEntity.noContent().build(); // Returns 204 No Content on successful deletion
+	}
+
+
+
+}
