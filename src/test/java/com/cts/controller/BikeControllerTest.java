@@ -94,7 +94,10 @@ class BikeControllerTest {
     @Test
     @DisplayName("Update Bike")
     void testUpdateBike() throws Exception {
-    	when(bikeService.updateBike(anyLong(), any(Bike.class))).thenReturn(bikeEntity);
+        Bike updatedBike = new Bike(1, "Honda", "CB350", "KA19MA1234", "12345678901234567", "Brake pad issue", 145000, null, null, null, null, null);
+
+        when(bikeService.updateBike(anyLong(), any(BikeDto.class))).thenReturn(updatedBike);
+        
         var jsonBike = mapper.writeValueAsString(bike1);
 
         mockMvc.perform(put("/api/bikes/1")
@@ -103,7 +106,7 @@ class BikeControllerTest {
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.bikeMake").value("Honda"));
     }
-    
+
     @Test
     @DisplayName("Delete Bike")
     void testDeleteBike() throws Exception {

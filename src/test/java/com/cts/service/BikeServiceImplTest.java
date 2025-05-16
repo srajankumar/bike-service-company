@@ -105,17 +105,18 @@ class BikeServiceImplTest {
         when(bikeRepository.findById(anyLong())).thenReturn(Optional.of(bike1));
         when(bikeRepository.save(any(Bike.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        Bike updatedBike = new Bike();
-        updatedBike.setBikeMake("Royal Enfield");
+        BikeDto updatedBikeDto = new BikeDto();
+        updatedBikeDto.setBikeMake("Royal Enfield");
 
-        var result = bikeService.updateBike(1L, updatedBike);
+        var result = bikeService.updateBike(1, updatedBikeDto);
 
         assertNotNull(result);
         assertEquals("Royal Enfield", result.getBikeMake());
 
         verify(bikeRepository, times(1)).findById(1L);
-        verify(bikeRepository, times(1)).save(bike1);
+        verify(bikeRepository, times(1)).save(any(Bike.class));
     }
+
 
     @Test
     @DisplayName("Delete Bike")
