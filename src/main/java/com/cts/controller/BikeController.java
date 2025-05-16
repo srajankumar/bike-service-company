@@ -1,6 +1,5 @@
 package com.cts.controller;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -51,27 +50,14 @@ public class BikeController {
 	    return ResponseEntity.status(HttpStatus.CREATED).body(savedBike);
 	}
 
-	
 	@PutMapping("/{id}")
 	public ResponseEntity<Bike> updateBike(@PathVariable long id, @Valid @RequestBody BikeDto bikeDto) {
 	    if (bikeDto == null) {
 	        return ResponseEntity.badRequest().build();
 	    }
 
-	    Bike bike = new Bike();
-	    bike.setBikeMake(bikeDto.getBikeMake());
-	    bike.setModelName(bikeDto.getModelName());
-	    bike.setBikeRegistrationNumber(bikeDto.getBikeRegistrationNumber());
-	    bike.setBikeChassisNumber(bikeDto.getBikeChassisNumber());
-	    bike.setKnownIssues(bikeDto.getKnownIssues());
-	    bike.setCost(bikeDto.getCost());
-	    bike.setGivenDate(bikeDto.getGivenDate());
-	    bike.setExpectedDeliveryDate(bikeDto.getExpectedDeliveryDate());
-	    bike.setCreatedDateAndTime(bikeDto.getCreatedDateAndTime());
-	    bike.setUpdatedDateAndTime(LocalDateTime.now());
-	    bike.setCustomer(bikeDto.getCustomer());
+	    Bike updatedBike = bikeService.updateBike(id, bikeDto);
 
-	    Bike updatedBike = bikeService.updateBike(id, bike);
 	    return ResponseEntity.ok(updatedBike);
 	}
 
@@ -80,7 +66,5 @@ public class BikeController {
 	    bikeService.deleteBike(id);
 	    return ResponseEntity.noContent().build(); // Returns 204 No Content on successful deletion
 	}
-
-
 
 }

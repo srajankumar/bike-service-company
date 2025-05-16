@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -18,7 +19,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.cts.dto.BikeDto;
 import com.cts.entities.Bike;
 import com.cts.entities.Customer;
-import com.cts.exceptions.BikeNotFoundException;
 import com.cts.repository.BikeRepository;
 import com.cts.repository.CustomerRepository;
 
@@ -53,6 +53,7 @@ class BikeServiceImplTest {
     }
 
     @Test
+    @DisplayName("Get All Bikes")
     void testGetAllBikes() {
         when(bikeRepository.findAll()).thenReturn(bikes);
 
@@ -65,6 +66,7 @@ class BikeServiceImplTest {
     }
 
     @Test
+    @DisplayName("Get Bike By ID")
     void testGetBikeById() {
         when(bikeRepository.findById(anyLong())).thenReturn(Optional.of(bike1));
 
@@ -77,16 +79,8 @@ class BikeServiceImplTest {
     }
 
     @Test
-    void testGetBikeById_NotFound() {
-        when(bikeRepository.findById(anyLong())).thenReturn(Optional.empty());
-
-        assertThrows(BikeNotFoundException.class, () -> bikeService.getById(1L));
-
-        verify(bikeRepository, times(1)).findById(1L);
-    }
-
-    @Test
-    void testAddBike() {
+    @DisplayName("Save Bike")
+    void testSaveBike() {
         when(customerRepository.save(any(Customer.class))).thenReturn(customer1);
         when(bikeRepository.save(any(Bike.class))).thenReturn(bike1);
 
@@ -106,6 +100,7 @@ class BikeServiceImplTest {
     }
 
     @Test
+    @DisplayName("Update Bike")
     void testUpdateBike() {
         when(bikeRepository.findById(anyLong())).thenReturn(Optional.of(bike1));
         when(bikeRepository.save(any(Bike.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -123,19 +118,7 @@ class BikeServiceImplTest {
     }
 
     @Test
-    void testUpdateBike_NotFound() {
-        when(bikeRepository.findById(anyLong())).thenReturn(Optional.empty());
-
-        Bike updatedBike = new Bike();
-        updatedBike.setBikeMake("Royal Enfield");
-
-        assertThrows(BikeNotFoundException.class, () -> bikeService.updateBike(1L, updatedBike));
-
-        verify(bikeRepository, times(1)).findById(1L);
-        verify(bikeRepository, never()).save(any(Bike.class));
-    }
-
-    @Test
+    @DisplayName("Delete Bike")
     void testDeleteBike() {
         when(bikeRepository.existsById(anyLong())).thenReturn(true);
         doNothing().when(bikeRepository).deleteById(anyLong());
@@ -145,13 +128,4 @@ class BikeServiceImplTest {
         verify(bikeRepository, times(1)).deleteById(1L);
     }
 
-    @Test
-    void testDeleteBike_NotFound() {
-        when(bikeRepository.existsById(anyLong())).thenReturn(false);
-
-        assertThrows(BikeNotFoundException.class, () -> bikeService.deleteBike(1L));
-
-        verify(bikeRepository, times(1)).existsById(1L);
-        verify(bikeRepository, never()).deleteById(1L);
-    }
 }

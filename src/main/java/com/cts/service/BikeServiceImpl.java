@@ -86,39 +86,48 @@ public class BikeServiceImpl implements BikeService {
 	}
 
 	@Override
-	public Bike updateBike(long id, Bike bike) {
+	public Bike updateBike(long id, BikeDto bikeDto) {
 	    Bike existingBike = bikeRepository.findById(id)
 	            .orElseThrow(() -> new BikeNotFoundException("Bike with ID: " + id + " not found."));
 
-	    if (bike.getBikeMake() != null) {
-	        existingBike.setBikeMake(bike.getBikeMake());
+	    if (bikeDto.getBikeMake() != null) {
+	        existingBike.setBikeMake(bikeDto.getBikeMake());
 	    }
-	    if (bike.getModelName() != null) {
-	        existingBike.setModelName(bike.getModelName());
+	    if (bikeDto.getModelName() != null) {
+	        existingBike.setModelName(bikeDto.getModelName());
 	    }
-	    if (bike.getBikeRegistrationNumber() != null) {
-	        existingBike.setBikeRegistrationNumber(bike.getBikeRegistrationNumber());
+	    if (bikeDto.getBikeRegistrationNumber() != null) {
+	        existingBike.setBikeRegistrationNumber(bikeDto.getBikeRegistrationNumber());
 	    }
-	    if (bike.getBikeChassisNumber() != null) {
-	        existingBike.setBikeChassisNumber(bike.getBikeChassisNumber());
+	    if (bikeDto.getBikeChassisNumber() != null) {
+	        existingBike.setBikeChassisNumber(bikeDto.getBikeChassisNumber());
 	    }
-	    if (bike.getKnownIssues() != null) {
-	        existingBike.setKnownIssues(bike.getKnownIssues());
-	    }
-	    if (bike.getCost() > 0) { // Ensures cost is positive
-	        existingBike.setCost(bike.getCost());
-	    }
-	    if (bike.getGivenDate() != null) {
-	        existingBike.setGivenDate(bike.getGivenDate());
-	    }
-	    if (bike.getExpectedDeliveryDate() != null) {
-	        existingBike.setExpectedDeliveryDate(bike.getExpectedDeliveryDate());
+	    if (bikeDto.getKnownIssues() != null) {
+	        existingBike.setKnownIssues(bikeDto.getKnownIssues());
 	    }
 
-	    existingBike.setUpdatedDateAndTime(LocalDateTime.now()); // Auto update timestamp
+	    // Ensures cost is positive
+	    if (bikeDto.getCost() > 0) {
+	        existingBike.setCost(bikeDto.getCost());
+	    }
+	    if (bikeDto.getGivenDate() != null) {
+	        existingBike.setGivenDate(bikeDto.getGivenDate());
+	    }
+	    if (bikeDto.getExpectedDeliveryDate() != null) {
+	        existingBike.setExpectedDeliveryDate(bikeDto.getExpectedDeliveryDate());
+	    }
+
+	    // Auto update timestamp
+	    existingBike.setUpdatedDateAndTime(LocalDateTime.now());
+
+	    if (bikeDto.getCustomer() != null) {
+	        Customer savedCustomer = customerRepository.save(bikeDto.getCustomer());
+	        existingBike.setCustomer(savedCustomer);
+	    }
 
 	    return bikeRepository.save(existingBike);
 	}
+
 
 
 	@Override
