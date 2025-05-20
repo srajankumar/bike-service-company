@@ -20,9 +20,9 @@ public class Customer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long customerId;
-	@Pattern(regexp = "[A-Za-z\s]+", message = "Customer name should contain only alphabets.")
+	@Pattern(regexp = "^[A-Za-z ]+", message = "Customer name should contain only alphabets")
 	private String customerName;
-	@Pattern(regexp = "\\d{10}", message = "Phone number should contain only 10 digits.")
+	@Pattern(regexp = "\\d{10}", message = "Phone number should contain only 10 digits")
 	private String phoneNumber; 
 	private String houseNo;
 	private String street;

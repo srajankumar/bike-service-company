@@ -29,12 +29,9 @@ public class Bike {
 	private long bikeId;
 	private String bikeMake;
 	private String modelName;
-	@Pattern(regexp = "[A-Z]{2}\\d{2}[A-Z]{2}\\d{4}", message = "Invalid registration number format.")
 	private String bikeRegistrationNumber;
-	@Pattern(regexp = "\\d{17}", message = "Bike chassis number must be 17 digits.")
 	private String bikeChassisNumber;
 	private String knownIssues;
-	@Positive(message = "Cost must be a positive number.")
 	private double cost;
 	private LocalDateTime givenDate;
 	private LocalDate expectedDeliveryDate;

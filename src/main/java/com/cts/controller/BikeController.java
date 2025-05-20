@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,16 +31,20 @@ public class BikeController {
 		this.bikeService = bikeService;
 	}
 
+	// Get all bike details
 	@GetMapping
 	public List<BikeDto> getAll() {
 		return bikeService.getAll();
 	}
-
+	
+	// Get existing bike details by ID
 	@GetMapping("/{id}")
 	public BikeDto getById(@PathVariable long id) {
 		return bikeService.getById(id);
 	}
 
+	// Save new bike details
+	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/save")
 	public ResponseEntity<Bike> addBike(@Valid @RequestBody BikeDto bikeDto) {
 	    if (bikeDto == null || bikeDto.getCustomer() == null) {
@@ -47,9 +52,11 @@ public class BikeController {
 	    }
 
 	    Bike savedBike = bikeService.addBike(bikeDto);
-	    return ResponseEntity.status(HttpStatus.CREATED).body(savedBike);
+	    return ResponseEntity.status(HttpStatus.CREATED).body(savedBike); // Returns 201 Created
 	}
 
+	// Update existing bike details
+	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/{id}")
 	public ResponseEntity<Bike> updateBike(@PathVariable long id, @Valid @RequestBody BikeDto bikeDto) {
 	    if (bikeDto == null) {
@@ -58,13 +65,15 @@ public class BikeController {
 
 	    Bike updatedBike = bikeService.updateBike(id, bikeDto);
 
-	    return ResponseEntity.ok(updatedBike);
+	    return ResponseEntity.status(HttpStatus.CREATED).body(updatedBike); // Returns 201 Created
 	}
 
+	// Delete bike details
+	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping("/{id}")
 	public ResponseEntity<Void> deleteBike(@PathVariable long id) {
 	    bikeService.deleteBike(id);
-	    return ResponseEntity.noContent().build(); // Returns 204 No Content on successful deletion
+	    return ResponseEntity.accepted().build(); // Returns 202 Accepted
 	}
 
 }

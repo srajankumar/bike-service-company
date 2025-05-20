@@ -9,6 +9,7 @@ import com.cts.BikeserviceApplication;
 import com.cts.dto.BikeDto;
 import com.cts.entities.Bike;
 import com.cts.entities.Customer;
+import com.cts.dto.CustomerDto;
 import com.cts.exceptions.BikeNotFoundException;
 import com.cts.repository.BikeRepository;
 import com.cts.repository.CustomerRepository;
@@ -56,7 +57,7 @@ public class BikeServiceImpl implements BikeService {
 
 	@Override
 	public BikeDto getById(long id) {
-		Bike bike = bikeRepository.findById(id).orElseThrow(() -> new BikeNotFoundException("Bike not found."));
+		Bike bike = bikeRepository.findById(id).orElseThrow(() -> new BikeNotFoundException("Bike with ID: " + id + " not found"));
 		if(bike != null) {
 			BikeDto bikeDto= new BikeDto(bike.getBikeId(), bike.getBikeMake(), bike.getModelName(), bike.getBikeRegistrationNumber(), bike.getBikeChassisNumber(), bike.getKnownIssues(), bike.getCost(), bike.getGivenDate(), bike.getExpectedDeliveryDate(), bike.getCreatedDateAndTime(), bike.getUpdatedDateAndTime(), bike.getCustomer());
 			return bikeDto;
@@ -88,7 +89,7 @@ public class BikeServiceImpl implements BikeService {
 	@Override
 	public Bike updateBike(long id, BikeDto bikeDto) {
 	    Bike existingBike = bikeRepository.findById(id)
-	            .orElseThrow(() -> new BikeNotFoundException("Bike with ID: " + id + " not found."));
+	            .orElseThrow(() -> new BikeNotFoundException("Bike with ID: " + id + " not found"));
 
 	    if (bikeDto.getBikeMake() != null) {
 	        existingBike.setBikeMake(bikeDto.getBikeMake());
@@ -121,7 +122,40 @@ public class BikeServiceImpl implements BikeService {
 	    existingBike.setUpdatedDateAndTime(LocalDateTime.now());
 
 	    if (bikeDto.getCustomer() != null) {
-	        Customer savedCustomer = customerRepository.save(bikeDto.getCustomer());
+	        Customer existingCustomer = existingBike.getCustomer(); // Get current customer
+
+	        if (existingCustomer == null) {
+	            existingCustomer = new Customer(); // Create new customer if null
+	        }
+
+	        Customer customerDto = bikeDto.getCustomer();
+
+	        if (customerDto.getCustomerName() != null) {
+	            existingCustomer.setCustomerName(customerDto.getCustomerName());
+	        }
+	        if (customerDto.getPhoneNumber() != null) {
+	            existingCustomer.setPhoneNumber(customerDto.getPhoneNumber());
+	        }
+	        if (customerDto.getHouseNo() != null) {
+	            existingCustomer.setHouseNo(customerDto.getHouseNo());
+	        }
+	        if (customerDto.getStreet() != null) {
+	            existingCustomer.setStreet(customerDto.getStreet());
+	        }
+	        if (customerDto.getLandmark() != null) {
+	            existingCustomer.setLandmark(customerDto.getLandmark());
+	        }
+	        if (customerDto.getCity() != null) {
+	            existingCustomer.setCity(customerDto.getCity());
+	        }
+	        if (customerDto.getState() != null) {
+	            existingCustomer.setState(customerDto.getState());
+	        }
+	        if (customerDto.getPin() != null) {
+	            existingCustomer.setPin(customerDto.getPin());
+	        }
+
+	        Customer savedCustomer = customerRepository.save(existingCustomer);
 	        existingBike.setCustomer(savedCustomer);
 	    }
 
@@ -133,7 +167,7 @@ public class BikeServiceImpl implements BikeService {
 	@Override
 	public void deleteBike(long id) {
 	    if (!bikeRepository.existsById(id)) {
-	        throw new BikeNotFoundException("Bike with ID: " + id + " not found.");
+	        throw new BikeNotFoundException("Bike with ID: " + id + " not found");
 	    }
 	    bikeRepository.deleteById(id);
 	}

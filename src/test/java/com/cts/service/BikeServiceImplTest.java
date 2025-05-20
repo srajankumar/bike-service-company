@@ -44,8 +44,14 @@ class BikeServiceImplTest {
         customer1 = new Customer();
         customer1.setCustomerName("Rahul Sharma");
 
-        bike1 = new Bike(1, "Honda", "CB350", "KA19MA1234", "12345678901234567", "Brake pad issue", 145000, LocalDateTime.of(2025, 5, 15, 10, 30), LocalDate.of(2025, 5, 25), LocalDateTime.of(2025, 5, 15, 10, 30), LocalDateTime.now(), customer1);
-        bike2 = new Bike(2, "Yamaha", "R15", "TN10AB5678", "98765432101234567", "Battery issue", 175000, LocalDateTime.of(2025, 6, 10, 11, 00), LocalDate.of(2025, 6, 18), LocalDateTime.of(2025, 6, 10, 11, 00), LocalDateTime.now(), customer1);
+        bike1 = new Bike(1, "Honda", "CB350", "KA19MA1234", "12345678901234567",
+        		"Brake pad issue", 145000, LocalDateTime.of(2025, 5, 15, 10, 30), 
+        		LocalDate.of(2025, 5, 25), LocalDateTime.of(2025, 5, 15, 10, 30), 
+        		LocalDateTime.now(), customer1);
+        bike2 = new Bike(2, "Yamaha", "R15", "TN10AB5678", "98765432101234567", 
+        		"Battery issue", 175000, LocalDateTime.of(2025, 6, 10, 11, 00), 
+        		LocalDate.of(2025, 6, 18), LocalDateTime.of(2025, 6, 10, 11, 00), 
+        		LocalDateTime.now(), customer1);
 
         bikes = new ArrayList<>();
         bikes.add(bike1);
