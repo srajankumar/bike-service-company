@@ -42,12 +42,7 @@ class BikeControllerTest {
     private BikeService bikeService;
 
     @Autowired
-    private JwtTokenProvider jwtTokenProvider;
-
-    @Autowired
     private ObjectMapper objectMapper;
-
-    private String jwtToken;
 
     private BikeDto bike1;
     private BikeDto bike2;
@@ -55,10 +50,6 @@ class BikeControllerTest {
 
     @BeforeEach
     void setUp() {
-        // Generate token using JwtTokenProvider
-        var auth = new UsernamePasswordAuthenticationToken("srajan", null,
-                Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")));
-        jwtToken = "Bearer " + jwtTokenProvider.generateToken(auth);
 
         bike1 = new BikeDto(1, "Honda", "CB350", "KA19MA1234", "12345678901234567",
                 "Brake pad issue", 145000, null, null, null, null, null);
@@ -83,9 +74,7 @@ class BikeControllerTest {
     void testGetAllBikes() throws Exception {
         when(bikeService.getAll()).thenReturn(List.of(bike1, bike2));
 
-        mockMvc.perform(get("/api/bikes")
-//                        .header("Authorization", jwtToken)
-                        )
+        mockMvc.perform(get("/api/bikes"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(2))
                 .andExpect(jsonPath("$[0].bikeMake").value("Honda"));
@@ -93,24 +82,24 @@ class BikeControllerTest {
 
     @Test
     @DisplayName("Get Bike By ID")
+    @WithMockUser
     void testGetBikeById() throws Exception {
         when(bikeService.getById(1L)).thenReturn(bike1);
 
-        mockMvc.perform(get("/api/bikes/1")
-                        .header("Authorization", jwtToken))
+        mockMvc.perform(get("/api/bikes/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.bikeMake").value("Honda"));
     }
 
     @Test
     @DisplayName("Save Bike")
+    @WithMockUser(roles = "ADMIN")
     void testSaveBike() throws Exception {
         when(bikeService.addBike(any(BikeDto.class))).thenReturn(bikeEntity);
 
         var json = objectMapper.writeValueAsString(bikeEntity);
 
         mockMvc.perform(post("/api/bikes/save")
-                        .header("Authorization", jwtToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isCreated());
@@ -125,7 +114,6 @@ class BikeControllerTest {
         var json = objectMapper.writeValueAsString(bike1);
 
         mockMvc.perform(put("/api/bikes/1")
-//                        .header("Authorization", jwtToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isCreated())
@@ -134,11 +122,11 @@ class BikeControllerTest {
 
     @Test
     @DisplayName("Delete Bike")
+    @WithMockUser(roles = "ADMIN")
     void testDeleteBike() throws Exception {
         doNothing().when(bikeService).deleteBike(1L);
 
-        mockMvc.perform(delete("/api/bikes/1")
-                        .header("Authorization", jwtToken))
+        mockMvc.perform(delete("/api/bikes/1"))
                 .andExpect(status().isAccepted());
     }
 }
