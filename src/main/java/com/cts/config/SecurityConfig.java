@@ -13,19 +13,25 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-
+import com.cts.security.JwtAccessDeniedHandler;
 import com.cts.security.JwtAuthenticationEntryPoint;
 import com.cts.security.JwtAuthenticationFilter;
 
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
+
+    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
 	
 	@Autowired
 	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 	
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
+
+    SecurityConfig(JwtAccessDeniedHandler jwtAccessDeniedHandler) {
+        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
+    }
 	
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -39,7 +45,8 @@ public class SecurityConfig {
 				.permitAll()
 				.anyRequest()
 				.authenticated())
-		.exceptionHandling(ex->ex.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+		.exceptionHandling(ex->ex.accessDeniedHandler(jwtAccessDeniedHandler)
+				.authenticationEntryPoint(jwtAuthenticationEntryPoint))
 		.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 		.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 		

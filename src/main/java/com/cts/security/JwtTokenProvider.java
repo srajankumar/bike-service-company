@@ -18,6 +18,7 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 
 @Component
 public class JwtTokenProvider {
@@ -56,7 +57,7 @@ public class JwtTokenProvider {
 		try {
 			Jwts.parser().verifyWith((SecretKey) key()).build().parse(token);
 			return true;
-		} catch (MalformedJwtException ex) {
+		} catch (MalformedJwtException | SignatureException ex) {
 			throw new BikeServiceException(HttpStatus.BAD_REQUEST, "Invalid token");
 		} catch (ExpiredJwtException ex) {
 			throw new BikeServiceException(HttpStatus.BAD_REQUEST, "Expired token");

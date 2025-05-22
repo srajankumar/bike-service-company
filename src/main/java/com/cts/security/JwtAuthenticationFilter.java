@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import com.cts.exceptions.BikeServiceException;
+
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,6 +32,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
 		
+		try {
 		String token = getTokenFromRequest(request);
 		
 		if(StringUtils.hasText(token) && jwtTokenProvider.validateToken(token)) {
@@ -43,6 +46,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 			authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 			
 			SecurityContextHolder.getContext().setAuthentication(authToken);
+		}
+		} catch(BikeServiceException e){
+			
+			response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+			response.setContentType("application/json");
+			response.getWriter().write("{\"error\": " + e.getMessage() + "}");
+			return;
 		}
 		
 		filterChain.doFilter(request, response);

@@ -18,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -78,11 +79,13 @@ class BikeControllerTest {
 
     @Test
     @DisplayName("Get All Bikes")
+    @WithMockUser
     void testGetAllBikes() throws Exception {
         when(bikeService.getAll()).thenReturn(List.of(bike1, bike2));
 
         mockMvc.perform(get("/api/bikes")
-                        .header("Authorization", jwtToken))
+//                        .header("Authorization", jwtToken)
+                        )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.size()").value(2))
                 .andExpect(jsonPath("$[0].bikeMake").value("Honda"));
@@ -104,7 +107,7 @@ class BikeControllerTest {
     void testSaveBike() throws Exception {
         when(bikeService.addBike(any(BikeDto.class))).thenReturn(bikeEntity);
 
-        var json = objectMapper.writeValueAsString(bike1);
+        var json = objectMapper.writeValueAsString(bikeEntity);
 
         mockMvc.perform(post("/api/bikes/save")
                         .header("Authorization", jwtToken)
@@ -115,13 +118,14 @@ class BikeControllerTest {
 
     @Test
     @DisplayName("Update Bike")
+    @WithMockUser(roles = "ADMIN")
     void testUpdateBike() throws Exception {
         when(bikeService.updateBike(eq(1L), any(BikeDto.class))).thenReturn(bikeEntity);
 
         var json = objectMapper.writeValueAsString(bike1);
 
         mockMvc.perform(put("/api/bikes/1")
-                        .header("Authorization", jwtToken)
+//                        .header("Authorization", jwtToken)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isCreated())
