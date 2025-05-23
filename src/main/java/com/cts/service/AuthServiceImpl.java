@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.cts.dto.LoginDto;
 import com.cts.security.JwtTokenProvider;
 
+// Implements authentication logic for user login
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -19,6 +20,7 @@ public class AuthServiceImpl implements AuthService {
 	@Autowired
 	private JwtTokenProvider jwtTokenProvider;
 	
+	// Authenticates the user and generates a JWT token
 	@Override
 	public String login(LoginDto loginDto) {
 

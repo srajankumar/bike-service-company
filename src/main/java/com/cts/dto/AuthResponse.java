@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// Represents the response sent after a user logs in
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

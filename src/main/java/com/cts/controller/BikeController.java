@@ -20,12 +20,14 @@ import com.cts.service.BikeService;
 
 import jakarta.validation.Valid;
 
+// Handles bike-related operations like getting, adding, updating, and deleting bikes
 @RestController
 @RequestMapping("/api/bikes")
 public class BikeController {
 
 	private BikeService bikeService;
 
+	// Constructor injections
 	public BikeController(BikeService bikeService) {
 		super();
 		this.bikeService = bikeService;

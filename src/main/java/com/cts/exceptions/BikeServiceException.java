@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// Custom exception for handling errors in the Bike Service application
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

@@ -10,6 +10,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+// Handles authentication failures and sends an error response
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 

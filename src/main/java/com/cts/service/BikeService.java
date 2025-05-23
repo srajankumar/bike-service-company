@@ -5,6 +5,7 @@ import java.util.List;
 import com.cts.dto.BikeDto;
 import com.cts.entities.Bike;
 
+// Defines the operations related to bike management
 public interface BikeService {
 	
 	List<BikeDto> getAll();

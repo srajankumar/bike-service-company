@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// Represents user roles stored in the database
 @AllArgsConstructor
 @NoArgsConstructor
 @Data

@@ -19,6 +19,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+// Filters incoming requests to verify JWT tokens and authenticate users
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -28,6 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 	@Autowired
 	private UserDetailsService userDetailsService;
 	
+	// Checks if the request contains a valid token, authenticates the user, and sets the security context
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 			throws ServletException, IOException {
@@ -59,12 +61,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		
 	}
 	
+	// Extracts the JWT token from the request header
 	private String getTokenFromRequest(HttpServletRequest request) {
 		
 		String bearerToken = request.getHeader("Authorization");
 		
+		// Ensures the token starts with "Bearer " before extracting it
 		if(StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer")) {
-			
 			String token = bearerToken.substring(7);
 			return token;
 		}

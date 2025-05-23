@@ -17,6 +17,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// Represents user details stored in the database
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -40,6 +41,7 @@ public class User {
 	@Column(nullable = false)
 	private String password;
 	
+	// List of roles assigned to the user
 	@ManyToMany(fetch = FetchType.EAGER)
 	private List<Role> roles;
 

@@ -17,6 +17,7 @@ import com.cts.security.JwtAccessDeniedHandler;
 import com.cts.security.JwtAuthenticationEntryPoint;
 import com.cts.security.JwtAuthenticationFilter;
 
+// Configures security settings for the application
 @Configuration
 @EnableMethodSecurity
 public class SecurityConfig {
@@ -29,10 +30,12 @@ public class SecurityConfig {
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+	// Sets up security configurations for access control
     SecurityConfig(JwtAccessDeniedHandler jwtAccessDeniedHandler) {
         this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
     }
 	
+    // Defines security rules, authentication, and exception handling
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		
@@ -41,7 +44,7 @@ public class SecurityConfig {
 		http.authorizeHttpRequests(auth->auth
 				.requestMatchers(HttpMethod.GET, "/api/bikes")
 				.permitAll()
-				.requestMatchers("/api/auth/**")
+				.requestMatchers("/api/auth/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**")
 				.permitAll()
 				.anyRequest()
 				.authenticated())
@@ -53,12 +56,14 @@ public class SecurityConfig {
 		return http.build();
 	}
 	
+	// Manages authentication configuration
 	@Bean
 	AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
 		
 		return config.getAuthenticationManager();
 	}
 	
+	// Encrypts passwords using bcrypt
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();

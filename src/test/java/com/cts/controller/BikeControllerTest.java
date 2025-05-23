@@ -31,6 +31,7 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+// Unit tests for the controller layer
 @SpringBootTest
 @AutoConfigureMockMvc
 class BikeControllerTest {
@@ -48,6 +49,7 @@ class BikeControllerTest {
     private BikeDto bike2;
     private Bike bikeEntity;
 
+    // Initializes test data before each test
     @BeforeEach
     void setUp() {
 
@@ -68,6 +70,7 @@ class BikeControllerTest {
         );
     }
 
+    // Tests retrieving all bikes from the API
     @Test
     @DisplayName("Get All Bikes")
     @WithMockUser
@@ -80,6 +83,7 @@ class BikeControllerTest {
                 .andExpect(jsonPath("$[0].bikeMake").value("Honda"));
     }
 
+    // Tests retrieving a bike by its ID from the API
     @Test
     @DisplayName("Get Bike By ID")
     @WithMockUser
@@ -91,6 +95,7 @@ class BikeControllerTest {
                 .andExpect(jsonPath("$.bikeMake").value("Honda"));
     }
 
+    // Tests saving a new bike through the API
     @Test
     @DisplayName("Save Bike")
     @WithMockUser(roles = "ADMIN")
@@ -105,6 +110,7 @@ class BikeControllerTest {
                 .andExpect(status().isCreated());
     }
 
+    // Tests updating an existing bike through the API
     @Test
     @DisplayName("Update Bike")
     @WithMockUser(roles = "ADMIN")
@@ -120,6 +126,7 @@ class BikeControllerTest {
                 .andExpect(jsonPath("$.bikeMake").value("Honda"));
     }
 
+    // Tests deleting a bike by its ID through the API
     @Test
     @DisplayName("Delete Bike")
     @WithMockUser(roles = "ADMIN")

@@ -22,6 +22,7 @@ import com.cts.entities.Customer;
 import com.cts.repository.BikeRepository;
 import com.cts.repository.CustomerRepository;
 
+// Unit tests for the service layer
 @SpringBootTest
 class BikeServiceImplTest {
 
@@ -39,6 +40,7 @@ class BikeServiceImplTest {
     private Customer customer1;
     private List<Bike> bikes;
 
+    // Initializes test data before each test
     @BeforeEach
     void init() {
         customer1 = new Customer();
@@ -58,6 +60,7 @@ class BikeServiceImplTest {
         bikes.add(bike2);
     }
 
+    // Tests retrieving all bikes from the database
     @Test
     @DisplayName("Get All Bikes")
     void testGetAllBikes() {
@@ -71,6 +74,7 @@ class BikeServiceImplTest {
         verify(bikeRepository, times(1)).findAll();
     }
 
+    // Tests retrieving a bike by its ID
     @Test
     @DisplayName("Get Bike By ID")
     void testGetBikeById() {
@@ -84,6 +88,7 @@ class BikeServiceImplTest {
         verify(bikeRepository, times(1)).findById(1L);
     }
 
+    // Tests saving a new bike to the database
     @Test
     @DisplayName("Save Bike")
     void testSaveBike() {
@@ -105,6 +110,7 @@ class BikeServiceImplTest {
         verify(bikeRepository, times(1)).save(any(Bike.class));
     }
 
+    // Tests updating an existing bike
     @Test
     @DisplayName("Update Bike")
     void testUpdateBike() {
@@ -123,7 +129,7 @@ class BikeServiceImplTest {
         verify(bikeRepository, times(1)).save(any(Bike.class));
     }
 
-
+    // Tests deleting a bike by its ID
     @Test
     @DisplayName("Delete Bike")
     void testDeleteBike() {

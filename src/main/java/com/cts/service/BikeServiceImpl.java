@@ -14,6 +14,23 @@ import com.cts.exceptions.BikeNotFoundException;
 import com.cts.repository.BikeRepository;
 import com.cts.repository.CustomerRepository;
 
+// package com.cts.service;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.cts.BikeserviceApplication;
+import com.cts.dto.BikeDto;
+import com.cts.entities.Bike;
+import com.cts.entities.Customer;
+import com.cts.exceptions.BikeNotFoundException;
+import com.cts.repository.BikeRepository;
+import com.cts.repository.CustomerRepository;
+
+// Implements bike-related operations such as retrieving, adding, updating, and deleting bikes
 @Service
 public class BikeServiceImpl implements BikeService {
 
@@ -31,6 +48,7 @@ public class BikeServiceImpl implements BikeService {
 		this.bikeserviceApplication = bikeserviceApplication;
 	}
 
+	// Retrieves all bikes from the database and converts them into DTO format
 	@Override
 	public List<BikeDto> getAll() {
 		List<Bike> bikes = bikeRepository.findAll();
@@ -55,6 +73,7 @@ public class BikeServiceImpl implements BikeService {
 		return bikeDtos;
 	}
 
+	// Get bike by ID, or throws an exception if not found
 	@Override
 	public BikeDto getById(long id) {
 		Bike bike = bikeRepository.findById(id).orElseThrow(() -> new BikeNotFoundException("Bike with ID: " + id + " not found"));
@@ -65,6 +84,7 @@ public class BikeServiceImpl implements BikeService {
 		return null;
 	}
 
+	// Add a new bike
 	@Override
 	public Bike addBike(BikeDto bikeDto) {
 	    Bike bike = new Bike();
@@ -86,6 +106,7 @@ public class BikeServiceImpl implements BikeService {
 	    return bikeRepository.save(bike);
 	}
 
+	// Update bike details
 	@Override
 	public Bike updateBike(long id, BikeDto bikeDto) {
 	    Bike existingBike = bikeRepository.findById(id)
@@ -161,9 +182,8 @@ public class BikeServiceImpl implements BikeService {
 
 	    return bikeRepository.save(existingBike);
 	}
-
-
-
+	
+	// Delete bike details
 	@Override
 	public void deleteBike(long id) {
 	    if (!bikeRepository.existsById(id)) {

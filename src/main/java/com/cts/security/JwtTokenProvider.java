@@ -20,6 +20,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
 
+// Handles JWT token creation and validation for user authentication
 @Component
 public class JwtTokenProvider {
 
@@ -29,8 +30,8 @@ public class JwtTokenProvider {
 	@Value("${app.jwt.expiry-millis}")
 	private long expiryMillis;
 
+	// Generates a JWT token for a user after successful authentication
 	public String generateToken(Authentication authentication) {
-
 		String username = authentication.getName();
 		Date currentDate = new Date();
 		Date expiryDate = new Date(currentDate.getTime() + expiryMillis);
@@ -40,18 +41,24 @@ public class JwtTokenProvider {
 		return token;
 	}
 
+	// Retrieves the signing key for token verification
 	private Key key() {
-
 		return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
 	}
 
+	// Extracts the username from a given JWT token
 	public String getUsername(String token) {
 
-		String username = Jwts.parser().verifyWith((SecretKey) key()).build().parseSignedClaims(token).getPayload()
+		String username = Jwts.parser()
+				.verifyWith((SecretKey) key())
+				.build()
+				.parseSignedClaims(token)
+				.getPayload()
 				.getSubject();
 		return username;
 	}
 
+	// Validates a JWT token to ensure it is correctly formed and not expired
 	public boolean validateToken(String token) {
 
 		try {

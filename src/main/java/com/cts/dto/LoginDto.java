@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// Holds login details for user authentication
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
