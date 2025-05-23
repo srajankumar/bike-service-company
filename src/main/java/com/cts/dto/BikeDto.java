@@ -38,11 +38,11 @@ public class BikeDto {
 	
 	private LocalDateTime givenDate;
 	private LocalDate expectedDeliveryDate;
-	private LocalDateTime CreatedDateAndTime;
+	private LocalDateTime createdDateAndTime;
 	private LocalDateTime updatedDateAndTime;
 	
 	// Customer details associated with the bike
 	@Valid
-	private Customer customer;
+	private CustomerDto customer;
 	
 }

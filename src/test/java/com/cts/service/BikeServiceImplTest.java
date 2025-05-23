@@ -17,12 +17,12 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.cts.dto.BikeDto;
+import com.cts.dto.CustomerDto;
 import com.cts.entities.Bike;
 import com.cts.entities.Customer;
 import com.cts.repository.BikeRepository;
 import com.cts.repository.CustomerRepository;
 
-// Unit tests for the service layer
 @SpringBootTest
 class BikeServiceImplTest {
 
@@ -37,30 +37,46 @@ class BikeServiceImplTest {
 
     private Bike bike1;
     private Bike bike2;
-    private Customer customer1;
+    private Customer customer;
     private List<Bike> bikes;
+    private CustomerDto customerDto;
+    private BikeDto bikeDto;
 
-    // Initializes test data before each test
     @BeforeEach
     void init() {
-        customer1 = new Customer();
-        customer1.setCustomerName("Rahul Sharma");
+        customer = new Customer();
+        customer.setCustomerId(1L);
+        customer.setCustomerName("Rahul Sharma");
+        customer.setPhoneNumber("9876543210");
+        customer.setCity("Udupi");
+
+        customerDto = new CustomerDto();
+        customerDto.setCustomerName("Rahul Sharma");
+        customerDto.setPhoneNumber("9876543210");
+        customerDto.setCity("Udupi");
 
         bike1 = new Bike(1, "Honda", "CB350", "KA19MA1234", "12345678901234567",
-        		"Brake pad issue", 145000, LocalDateTime.of(2025, 5, 15, 10, 30), 
-        		LocalDate.of(2025, 5, 25), LocalDateTime.of(2025, 5, 15, 10, 30), 
-        		LocalDateTime.now(), customer1);
-        bike2 = new Bike(2, "Yamaha", "R15", "TN10AB5678", "98765432101234567", 
-        		"Battery issue", 175000, LocalDateTime.of(2025, 6, 10, 11, 00), 
-        		LocalDate.of(2025, 6, 18), LocalDateTime.of(2025, 6, 10, 11, 00), 
-        		LocalDateTime.now(), customer1);
+                "Brake pad issue", 145000, LocalDateTime.of(2025, 5, 15, 10, 30),
+                LocalDate.of(2025, 5, 25), LocalDateTime.of(2025, 5, 15, 10, 30),
+                LocalDateTime.now(), customer);
+
+        bike2 = new Bike(2, "Yamaha", "R15", "TN10AB5678", "98765432101234567",
+                "Battery issue", 175000, LocalDateTime.of(2025, 6, 10, 11, 00),
+                LocalDate.of(2025, 6, 18), LocalDateTime.of(2025, 6, 10, 11, 00),
+                LocalDateTime.now(), customer);
+
+        bikeDto = new BikeDto();
+        bikeDto.setBikeMake("Honda");
+        bikeDto.setModelName("CB350");
+        bikeDto.setBikeRegistrationNumber("KA19MA1234");
+        bikeDto.setCustomer(customerDto);
 
         bikes = new ArrayList<>();
         bikes.add(bike1);
         bikes.add(bike2);
     }
 
-    // Tests retrieving all bikes from the database
+    // Test: Get all bikes
     @Test
     @DisplayName("Get All Bikes")
     void testGetAllBikes() {
@@ -70,11 +86,10 @@ class BikeServiceImplTest {
 
         assertEquals(2, result.size());
         assertEquals("Honda", result.get(0).getBikeMake());
-
         verify(bikeRepository, times(1)).findAll();
     }
 
-    // Tests retrieving a bike by its ID
+    // Test: Get bike by ID
     @Test
     @DisplayName("Get Bike By ID")
     void testGetBikeById() {
@@ -84,52 +99,38 @@ class BikeServiceImplTest {
 
         assertNotNull(bikeDto);
         assertEquals("Honda", bikeDto.getBikeMake());
-
         verify(bikeRepository, times(1)).findById(1L);
     }
 
-    // Tests saving a new bike to the database
+    // Test: Save new bike
     @Test
     @DisplayName("Save Bike")
     void testSaveBike() {
-        when(customerRepository.save(any(Customer.class))).thenReturn(customer1);
-        when(bikeRepository.save(any(Bike.class))).thenReturn(bike1);
-
-        BikeDto bikeDto = new BikeDto();
-        bikeDto.setBikeMake("Honda");
-        bikeDto.setModelName("CB350");
-        bikeDto.setBikeRegistrationNumber("KA19MA1234");
-        bikeDto.setCustomer(customer1);
-
-        var savedBike = bikeService.addBike(bikeDto);
-
-        assertNotNull(savedBike);
-        assertEquals("Honda", savedBike.getBikeMake());
-
-        verify(customerRepository, times(1)).save(any(Customer.class));
-        verify(bikeRepository, times(1)).save(any(Bike.class));
+    	when(bikeRepository.save(any(Bike.class))).thenReturn(bike1);
+		var result = bikeService.addBike(bikeDto);
+		assertNotNull(result);
+		assertEquals(bike1, result);
+		assertEquals("Honda", result.getBikeMake());
+		assertEquals(customer, result.getCustomer());
+		verify(bikeRepository,times(1)).save(any(Bike.class));
     }
-
-    // Tests updating an existing bike
+    
+    // Test: Update existing bike
     @Test
-    @DisplayName("Update Bike")
-    void testUpdateBike() {
-        when(bikeRepository.findById(anyLong())).thenReturn(Optional.of(bike1));
-        when(bikeRepository.save(any(Bike.class))).thenAnswer(invocation -> invocation.getArgument(0));
+    @DisplayName("Update Bike - Partial Update")
+	void testUpdateBike() {
+		when(bikeRepository.existsById(anyLong())).thenReturn(true);
+		when(bikeRepository.findById(anyLong())).thenReturn(Optional.of(bike1));
+		when(bikeRepository.save(any(Bike.class))).thenReturn(bike2);
+		var result = bikeService.updateBike(2, bikeDto);
+		assertEquals(bike2,result);
+		assertEquals("Yamaha", result.getBikeMake());
+		verify(bikeRepository,times(1)).existsById(anyLong());
+		verify(bikeRepository,times(1)).findById(anyLong());
+		verify(bikeRepository,times(1)).save(any(Bike.class));
+	}
 
-        BikeDto updatedBikeDto = new BikeDto();
-        updatedBikeDto.setBikeMake("Royal Enfield");
-
-        var result = bikeService.updateBike(1, updatedBikeDto);
-
-        assertNotNull(result);
-        assertEquals("Royal Enfield", result.getBikeMake());
-
-        verify(bikeRepository, times(1)).findById(1L);
-        verify(bikeRepository, times(1)).save(any(Bike.class));
-    }
-
-    // Tests deleting a bike by its ID
+    // Test: Delete bike by ID
     @Test
     @DisplayName("Delete Bike")
     void testDeleteBike() {
@@ -140,5 +141,4 @@ class BikeServiceImplTest {
 
         verify(bikeRepository, times(1)).deleteById(1L);
     }
-
 }

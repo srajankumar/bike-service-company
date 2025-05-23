@@ -70,7 +70,7 @@ class BikeControllerTest {
         );
     }
 
-    // Tests retrieving all bikes from the API
+    // Test: Get all bikes
     @Test
     @DisplayName("Get All Bikes")
     @WithMockUser
@@ -83,7 +83,7 @@ class BikeControllerTest {
                 .andExpect(jsonPath("$[0].bikeMake").value("Honda"));
     }
 
-    // Tests retrieving a bike by its ID from the API
+    // Test: Get bike by ID
     @Test
     @DisplayName("Get Bike By ID")
     @WithMockUser
@@ -95,7 +95,7 @@ class BikeControllerTest {
                 .andExpect(jsonPath("$.bikeMake").value("Honda"));
     }
 
-    // Tests saving a new bike through the API
+    // Test: Save new bike
     @Test
     @DisplayName("Save Bike")
     @WithMockUser(roles = "ADMIN")
@@ -110,7 +110,7 @@ class BikeControllerTest {
                 .andExpect(status().isCreated());
     }
 
-    // Tests updating an existing bike through the API
+    // Test: Update existing bike
     @Test
     @DisplayName("Update Bike")
     @WithMockUser(roles = "ADMIN")
@@ -126,7 +126,7 @@ class BikeControllerTest {
                 .andExpect(jsonPath("$.bikeMake").value("Honda"));
     }
 
-    // Tests deleting a bike by its ID through the API
+    // Test: Delete bike by ID
     @Test
     @DisplayName("Delete Bike")
     @WithMockUser(roles = "ADMIN")

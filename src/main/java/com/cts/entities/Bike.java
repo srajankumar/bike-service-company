@@ -34,7 +34,7 @@ public class Bike {
 	private double cost;
 	private LocalDateTime givenDate;
 	private LocalDate expectedDeliveryDate;
-	private LocalDateTime CreatedDateAndTime;
+	private LocalDateTime createdDateAndTime;
 	private LocalDateTime updatedDateAndTime;
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "customer_id")

@@ -3,7 +3,7 @@ package com.cts.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
+import com.cts.security.CustomUserDetailsService;
 import org.springframework.stereotype.Service;
 import com.cts.BikeserviceApplication;
 import com.cts.dto.BikeDto;
@@ -14,26 +14,11 @@ import com.cts.exceptions.BikeNotFoundException;
 import com.cts.repository.BikeRepository;
 import com.cts.repository.CustomerRepository;
 
-// package com.cts.service;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
-import com.cts.BikeserviceApplication;
-import com.cts.dto.BikeDto;
-import com.cts.entities.Bike;
-import com.cts.entities.Customer;
-import com.cts.exceptions.BikeNotFoundException;
-import com.cts.repository.BikeRepository;
-import com.cts.repository.CustomerRepository;
-
 // Implements bike-related operations such as retrieving, adding, updating, and deleting bikes
 @Service
 public class BikeServiceImpl implements BikeService {
 
+	private final CustomUserDetailsService customUserDetailsService;
 	private final BikeserviceApplication bikeserviceApplication;
 
 	private BikeRepository bikeRepository;
@@ -41,14 +26,15 @@ public class BikeServiceImpl implements BikeService {
 
 	// Constructor injection
 	public BikeServiceImpl(BikeRepository bikeRepository, CustomerRepository customerRepository,
-			BikeserviceApplication bikeserviceApplication) {
+			BikeserviceApplication bikeserviceApplication, CustomUserDetailsService customUserDetailsService) {
 		super();
 		this.bikeRepository = bikeRepository;
 		this.customerRepository = customerRepository;
 		this.bikeserviceApplication = bikeserviceApplication;
+		this.customUserDetailsService = customUserDetailsService;
 	}
 
-	// Retrieves all bikes from the database and converts them into DTO format
+	// Get all bikes
 	@Override
 	public List<BikeDto> getAll() {
 		List<Bike> bikes = bikeRepository.findAll();
@@ -66,131 +52,159 @@ public class BikeServiceImpl implements BikeService {
 			bikeDto.setExpectedDeliveryDate(bike.getExpectedDeliveryDate());
 			bikeDto.setCreatedDateAndTime(bike.getCreatedDateAndTime());
 			bikeDto.setUpdatedDateAndTime(bike.getUpdatedDateAndTime());
-			bikeDto.setCustomer(bike.getCustomer());
+
+			CustomerDto customerDto = new CustomerDto();
+			customerDto.setCustomerId(bike.getCustomer().getCustomerId());
+			customerDto.setCustomerName(bike.getCustomer().getCustomerName());
+			customerDto.setPhoneNumber(bike.getCustomer().getPhoneNumber());
+			customerDto.setHouseNo(bike.getCustomer().getHouseNo());
+			customerDto.setStreet(bike.getCustomer().getStreet());
+			customerDto.setLandmark(bike.getCustomer().getLandmark());
+			customerDto.setCity(bike.getCustomer().getCity());
+			customerDto.setState(bike.getCustomer().getState());
+			customerDto.setPin(bike.getCustomer().getPin());
+
+			bikeDto.setCustomer(customerDto);
 
 			bikeDtos.add(bikeDto);
 		}
 		return bikeDtos;
 	}
 
-	// Get bike by ID, or throws an exception if not found
+	// Get bike by ID
 	@Override
 	public BikeDto getById(long id) {
-		Bike bike = bikeRepository.findById(id).orElseThrow(() -> new BikeNotFoundException("Bike with ID: " + id + " not found"));
-		if(bike != null) {
-			BikeDto bikeDto= new BikeDto(bike.getBikeId(), bike.getBikeMake(), bike.getModelName(), bike.getBikeRegistrationNumber(), bike.getBikeChassisNumber(), bike.getKnownIssues(), bike.getCost(), bike.getGivenDate(), bike.getExpectedDeliveryDate(), bike.getCreatedDateAndTime(), bike.getUpdatedDateAndTime(), bike.getCustomer());
-			return bikeDto;
+		Bike bike = bikeRepository.findById(id)
+				.orElseThrow(() -> new BikeNotFoundException("Bike with ID: " + id + " not found"));
+
+		BikeDto bikeDto = new BikeDto();
+		bikeDto.setBikeId(bike.getBikeId());
+		bikeDto.setBikeMake(bike.getBikeMake());
+		bikeDto.setModelName(bike.getModelName());
+		bikeDto.setBikeRegistrationNumber(bike.getBikeRegistrationNumber());
+		bikeDto.setBikeChassisNumber(bike.getBikeChassisNumber());
+		bikeDto.setKnownIssues(bike.getKnownIssues());
+		bikeDto.setCost(bike.getCost());
+		bikeDto.setGivenDate(bike.getGivenDate());
+		bikeDto.setExpectedDeliveryDate(bike.getExpectedDeliveryDate());
+		bikeDto.setCreatedDateAndTime(bike.getCreatedDateAndTime());
+		bikeDto.setUpdatedDateAndTime(bike.getUpdatedDateAndTime());
+
+		if (bike.getCustomer() != null) {
+			CustomerDto customerDto = new CustomerDto();
+			customerDto.setCustomerId(bike.getCustomer().getCustomerId());
+			customerDto.setCustomerName(bike.getCustomer().getCustomerName());
+			customerDto.setPhoneNumber(bike.getCustomer().getPhoneNumber());
+			customerDto.setHouseNo(bike.getCustomer().getHouseNo());
+			customerDto.setStreet(bike.getCustomer().getStreet());
+			customerDto.setLandmark(bike.getCustomer().getLandmark());
+			customerDto.setCity(bike.getCustomer().getCity());
+			customerDto.setState(bike.getCustomer().getState());
+			customerDto.setPin(bike.getCustomer().getPin());
+			bikeDto.setCustomer(customerDto);
 		}
-		return null;
+
+		return bikeDto;
 	}
 
 	// Add a new bike
 	@Override
 	public Bike addBike(BikeDto bikeDto) {
-	    Bike bike = new Bike();
-	    
-	    bike.setBikeMake(bikeDto.getBikeMake());
-	    bike.setModelName(bikeDto.getModelName());
-	    bike.setBikeRegistrationNumber(bikeDto.getBikeRegistrationNumber());
-	    bike.setBikeChassisNumber(bikeDto.getBikeChassisNumber());
-	    bike.setKnownIssues(bikeDto.getKnownIssues());
-	    bike.setCost(bikeDto.getCost());
-	    bike.setGivenDate(bikeDto.getGivenDate());
-	    bike.setExpectedDeliveryDate(bikeDto.getExpectedDeliveryDate());
-	    bike.setCreatedDateAndTime(bikeDto.getCreatedDateAndTime());
-	    bike.setUpdatedDateAndTime(LocalDateTime.now());
+		Bike bike = new Bike();
 
-	    Customer savedCustomer = customerRepository.save(bikeDto.getCustomer());
-	    bike.setCustomer(savedCustomer);
+		bike.setBikeMake(bikeDto.getBikeMake());
+		bike.setModelName(bikeDto.getModelName());
+		bike.setBikeRegistrationNumber(bikeDto.getBikeRegistrationNumber());
+		bike.setBikeChassisNumber(bikeDto.getBikeChassisNumber());
+		bike.setKnownIssues(bikeDto.getKnownIssues());
+		bike.setCost(bikeDto.getCost());
+		bike.setGivenDate(bikeDto.getGivenDate());
+		bike.setExpectedDeliveryDate(bikeDto.getExpectedDeliveryDate());
+		bike.setCreatedDateAndTime(bikeDto.getCreatedDateAndTime());
+		bike.setUpdatedDateAndTime(LocalDateTime.now());
 
-	    return bikeRepository.save(bike);
+		Customer customer = new Customer();
+		customer.setCustomerName(bikeDto.getCustomer().getCustomerName());
+		customer.setPhoneNumber(bikeDto.getCustomer().getPhoneNumber());
+		customer.setHouseNo(bikeDto.getCustomer().getHouseNo());
+		customer.setStreet(bikeDto.getCustomer().getStreet());
+		customer.setLandmark(bikeDto.getCustomer().getLandmark());
+		customer.setCity(bikeDto.getCustomer().getCity());
+		customer.setState(bikeDto.getCustomer().getState());
+		customer.setPin(bikeDto.getCustomer().getPin());
+
+		bike.setCustomer(customer);
+
+		return bikeRepository.save(bike);
 	}
 
 	// Update bike details
 	@Override
 	public Bike updateBike(long id, BikeDto bikeDto) {
-	    Bike existingBike = bikeRepository.findById(id)
-	            .orElseThrow(() -> new BikeNotFoundException("Bike with ID: " + id + " not found"));
+		if (!bikeRepository.existsById(id)) {
+			throw new BikeNotFoundException("Bike with id: " + id + " not found");
+		}
 
-	    if (bikeDto.getBikeMake() != null) {
-	        existingBike.setBikeMake(bikeDto.getBikeMake());
-	    }
-	    if (bikeDto.getModelName() != null) {
-	        existingBike.setModelName(bikeDto.getModelName());
-	    }
-	    if (bikeDto.getBikeRegistrationNumber() != null) {
-	        existingBike.setBikeRegistrationNumber(bikeDto.getBikeRegistrationNumber());
-	    }
-	    if (bikeDto.getBikeChassisNumber() != null) {
-	        existingBike.setBikeChassisNumber(bikeDto.getBikeChassisNumber());
-	    }
-	    if (bikeDto.getKnownIssues() != null) {
-	        existingBike.setKnownIssues(bikeDto.getKnownIssues());
-	    }
+		Bike bike = bikeRepository.findById(id).get();
 
-	    // Ensures cost is positive
-	    if (bikeDto.getCost() > 0) {
-	        existingBike.setCost(bikeDto.getCost());
-	    }
-	    if (bikeDto.getGivenDate() != null) {
-	        existingBike.setGivenDate(bikeDto.getGivenDate());
-	    }
-	    if (bikeDto.getExpectedDeliveryDate() != null) {
-	        existingBike.setExpectedDeliveryDate(bikeDto.getExpectedDeliveryDate());
-	    }
+		if (bikeDto.getBikeMake() != null) {
+			bike.setBikeMake(bikeDto.getBikeMake());
+		}
+		if (bikeDto.getModelName() != null)
+			bike.setModelName(bikeDto.getModelName());
+		if (bikeDto.getBikeRegistrationNumber() != null)
+			bike.setBikeRegistrationNumber(bikeDto.getBikeRegistrationNumber());
+		if (bikeDto.getBikeChassisNumber() != null)
+			bike.setBikeChassisNumber(bikeDto.getBikeChassisNumber());
+		if (bikeDto.getKnownIssues() != null)
+			bike.setKnownIssues(bikeDto.getKnownIssues());
+		if (bikeDto.getCost() != 0)
+			bike.setCost(bikeDto.getCost());
+		if (bikeDto.getExpectedDeliveryDate() != null)
+			bike.setExpectedDeliveryDate(bikeDto.getExpectedDeliveryDate());
 
-	    // Auto update timestamp
-	    existingBike.setUpdatedDateAndTime(LocalDateTime.now());
+		bike.setUpdatedDateAndTime(LocalDateTime.now());
 
-	    if (bikeDto.getCustomer() != null) {
-	        Customer existingCustomer = existingBike.getCustomer(); // Get current customer
+		if (bike.getCustomer() != null) {
+			Customer customer = bike.getCustomer();
 
-	        if (existingCustomer == null) {
-	            existingCustomer = new Customer(); // Create new customer if null
-	        }
+			if (bikeDto.getCustomer().getCustomerName() != null)
+				customer.setCustomerName(bikeDto.getCustomer().getCustomerName());
 
-	        Customer customerDto = bikeDto.getCustomer();
+			if (bikeDto.getCustomer().getPhoneNumber() != null)
+				customer.setPhoneNumber(bikeDto.getCustomer().getPhoneNumber());
 
-	        if (customerDto.getCustomerName() != null) {
-	            existingCustomer.setCustomerName(customerDto.getCustomerName());
-	        }
-	        if (customerDto.getPhoneNumber() != null) {
-	            existingCustomer.setPhoneNumber(customerDto.getPhoneNumber());
-	        }
-	        if (customerDto.getHouseNo() != null) {
-	            existingCustomer.setHouseNo(customerDto.getHouseNo());
-	        }
-	        if (customerDto.getStreet() != null) {
-	            existingCustomer.setStreet(customerDto.getStreet());
-	        }
-	        if (customerDto.getLandmark() != null) {
-	            existingCustomer.setLandmark(customerDto.getLandmark());
-	        }
-	        if (customerDto.getCity() != null) {
-	            existingCustomer.setCity(customerDto.getCity());
-	        }
-	        if (customerDto.getState() != null) {
-	            existingCustomer.setState(customerDto.getState());
-	        }
-	        if (customerDto.getPin() != null) {
-	            existingCustomer.setPin(customerDto.getPin());
-	        }
+			if (bikeDto.getCustomer().getHouseNo() != null)
+				customer.setHouseNo(bikeDto.getCustomer().getHouseNo());
 
-	        Customer savedCustomer = customerRepository.save(existingCustomer);
-	        existingBike.setCustomer(savedCustomer);
-	    }
+			if (bikeDto.getCustomer().getStreet() != null)
+				customer.setStreet(bikeDto.getCustomer().getStreet());
 
-	    return bikeRepository.save(existingBike);
+			if (bikeDto.getCustomer().getLandmark() != null)
+				customer.setLandmark(bikeDto.getCustomer().getLandmark());
+
+			if (bikeDto.getCustomer().getCity() != null)
+				customer.setCity(bikeDto.getCustomer().getCity());
+
+			if (bikeDto.getCustomer().getState() != null)
+				customer.setState(bikeDto.getCustomer().getState());
+
+			if (bikeDto.getCustomer().getPin() != null)
+				customer.setPin(bikeDto.getCustomer().getPin());
+
+			bike.setCustomer(customer);
+		}
+
+		return bikeRepository.save(bike);
 	}
-	
+
 	// Delete bike details
 	@Override
 	public void deleteBike(long id) {
-	    if (!bikeRepository.existsById(id)) {
-	        throw new BikeNotFoundException("Bike with ID: " + id + " not found");
-	    }
-	    bikeRepository.deleteById(id);
+		if (!bikeRepository.existsById(id)) {
+			throw new BikeNotFoundException("Bike with ID: " + id + " not found");
+		}
+		bikeRepository.deleteById(id);
 	}
-
 
 }
