@@ -28,8 +28,8 @@ public class BikeDto {
 	
 	// Chassis number must be exactly 17 digits
 	@Pattern(regexp = "\\d{17}", message = "Bike chassis number must be 17 digits")
-	
 	private String bikeChassisNumber;
+	
 	private String knownIssues;
 	
 	// Cost of service must be a positive number
