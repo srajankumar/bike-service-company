@@ -3,9 +3,7 @@ package com.cts.service;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import com.cts.security.CustomUserDetailsService;
 import org.springframework.stereotype.Service;
-import com.cts.BikeserviceApplication;
 import com.cts.dto.BikeDto;
 import com.cts.dto.BikeUpdateDto;
 import com.cts.entities.Bike;
@@ -13,26 +11,17 @@ import com.cts.entities.Customer;
 import com.cts.dto.CustomerDto;
 import com.cts.exceptions.BikeNotFoundException;
 import com.cts.repository.BikeRepository;
-import com.cts.repository.CustomerRepository;
 
 // Implements bike-related operations such as retrieving, adding, updating, and deleting bikes
 @Service
 public class BikeServiceImpl implements BikeService {
 
-	private final CustomUserDetailsService customUserDetailsService;
-	private final BikeserviceApplication bikeserviceApplication;
-
 	private BikeRepository bikeRepository;
-	private CustomerRepository customerRepository;
 
 	// Constructor injection
-	public BikeServiceImpl(BikeRepository bikeRepository, CustomerRepository customerRepository,
-			BikeserviceApplication bikeserviceApplication, CustomUserDetailsService customUserDetailsService) {
+	public BikeServiceImpl(BikeRepository bikeRepository) {
 		super();
 		this.bikeRepository = bikeRepository;
-		this.customerRepository = customerRepository;
-		this.bikeserviceApplication = bikeserviceApplication;
-		this.customUserDetailsService = customUserDetailsService;
 	}
 
 	// Get all bikes
