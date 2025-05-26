@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cts.dto.BikeDto;
+import com.cts.dto.BikeUpdateDto;
 import com.cts.entities.Bike;
 import com.cts.service.BikeService;
 
@@ -60,13 +61,12 @@ public class BikeController {
 	// Update existing bike details
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/{id}")
-	public ResponseEntity<Bike> updateBike(@PathVariable long id, @Valid @RequestBody BikeDto bikeDto) {
-	    if (bikeDto == null) {
+	public ResponseEntity<Bike> updateBike(@PathVariable long id, @Valid @RequestBody BikeUpdateDto bikeUpdateDto) {
+	    if (bikeUpdateDto == null) {
 	        return ResponseEntity.badRequest().build();
 	    }
 
-	    Bike updatedBike = bikeService.updateBike(id, bikeDto);
-
+	    Bike updatedBike = bikeService.updateBike(id, bikeUpdateDto);
 	    return ResponseEntity.status(HttpStatus.CREATED).body(updatedBike); // Returns 201 Created
 	}
 

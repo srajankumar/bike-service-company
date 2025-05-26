@@ -3,7 +3,6 @@ package com.cts.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -14,27 +13,20 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class BikeDto {
+public class BikeUpdateDto {
 
 	private long bikeId;
-	
-	@NotBlank(message = "Bike make is required")
 	private String bikeMake;
-	
-	@NotBlank(message = "Model name is required")
 	private String modelName;
 	
-	// Registration number must follow a specific format (e.g., KA19MA1234) and cannot be null or empty
-	@NotBlank(message = "Bike registration number is required")
+	// Registration number must follow a specific format (e.g., KA19MA1234)
 	@Pattern(regexp = "[A-Z]{2}\\d{2}[A-Z]{2}\\d{4}", message = "Invalid registration number format")
 	private String bikeRegistrationNumber;
 	
-	// Chassis number must be exactly 17 digits and cannot be null or empty
-	@NotBlank(message = "Bike chassis number is required")
+	// Chassis number must be exactly 17 digits
 	@Pattern(regexp = "\\d{17}", message = "Bike chassis number must be 17 digits")
 	private String bikeChassisNumber;
 	
-	@NotBlank(message = "Known issues field is required")
 	private String knownIssues;
 	
 	// Cost of service must be a positive number
@@ -48,6 +40,6 @@ public class BikeDto {
 	
 	// Customer details associated with the bike
 	@Valid
-	private CustomerDto customer;
+	private CustomerUpdateDto customer;
 	
 }

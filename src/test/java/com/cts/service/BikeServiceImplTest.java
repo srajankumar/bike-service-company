@@ -17,7 +17,9 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.cts.dto.BikeDto;
+import com.cts.dto.BikeUpdateDto;
 import com.cts.dto.CustomerDto;
+import com.cts.dto.CustomerUpdateDto;
 import com.cts.entities.Bike;
 import com.cts.entities.Customer;
 import com.cts.repository.BikeRepository;
@@ -40,7 +42,9 @@ class BikeServiceImplTest {
     private Customer customer;
     private List<Bike> bikes;
     private CustomerDto customerDto;
+    private CustomerUpdateDto customerUpdateDto;
     private BikeDto bikeDto;
+    private BikeUpdateDto bikeUpdateDto;
 
     @BeforeEach
     void init() {
@@ -54,6 +58,11 @@ class BikeServiceImplTest {
         customerDto.setCustomerName("Rahul Sharma");
         customerDto.setPhoneNumber("9876543210");
         customerDto.setCity("Udupi");
+        
+        customerUpdateDto = new CustomerUpdateDto();
+        customerUpdateDto.setCustomerName("Rahul Sharma");
+        customerUpdateDto.setPhoneNumber("9876543210");
+        customerUpdateDto.setCity("Udupi");
 
         bike1 = new Bike(1, "Honda", "CB350", "KA19MA1234", "12345678901234567",
                 "Brake pad issue", 145000, LocalDateTime.of(2025, 5, 15, 10, 30),
@@ -64,12 +73,18 @@ class BikeServiceImplTest {
                 "Battery issue", 175000, LocalDateTime.of(2025, 6, 10, 11, 00),
                 LocalDate.of(2025, 6, 18), LocalDateTime.of(2025, 6, 10, 11, 00),
                 LocalDateTime.now(), customer);
-
+        
         bikeDto = new BikeDto();
         bikeDto.setBikeMake("Honda");
         bikeDto.setModelName("CB350");
         bikeDto.setBikeRegistrationNumber("KA19MA1234");
         bikeDto.setCustomer(customerDto);
+        
+        bikeUpdateDto = new BikeUpdateDto();
+        bikeUpdateDto.setBikeMake("Honda");
+        bikeUpdateDto.setModelName("CB350");
+        bikeUpdateDto.setBikeRegistrationNumber("KA19MA1234");
+        bikeUpdateDto.setCustomer(customerUpdateDto);
 
         bikes = new ArrayList<>();
         bikes.add(bike1);
@@ -122,7 +137,7 @@ class BikeServiceImplTest {
 		when(bikeRepository.existsById(anyLong())).thenReturn(true);
 		when(bikeRepository.findById(anyLong())).thenReturn(Optional.of(bike1));
 		when(bikeRepository.save(any(Bike.class))).thenReturn(bike2);
-		var result = bikeService.updateBike(2, bikeDto);
+		var result = bikeService.updateBike(2, bikeUpdateDto);
 		assertEquals(bike2,result);
 		assertEquals("Yamaha", result.getBikeMake());
 		verify(bikeRepository,times(1)).existsById(anyLong());

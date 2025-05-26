@@ -1,6 +1,5 @@
 package com.cts.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,37 +9,25 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CustomerDto {
+public class CustomerUpdateDto {
 
 	private long customerId;
 	
-	// Customer name should contain only letters and spaces and cannot be empty
-	@NotBlank(message = "Customer name is required")
+	// Customer name should contain only letters and spaces
 	@Pattern(regexp = "^[A-Za-z ]+", message = "Customer name should contain only alphabets")
 	private String customerName;
 	
-	// Phone number must be exactly 10 digits and cannot be empty
-	@NotBlank(message = "Phone number is required")
+	// Phone number must be exactly 10 digits
 	@Pattern(regexp = "\\d{10}", message = "Phone number should contain only 10 digits")
 	private String phoneNumber; 
 	
-	@NotBlank(message = "House number is required")
 	private String houseNo;
-	
-	@NotBlank(message = "Street is required")
 	private String street;
-	
-	@NotBlank(message = "Landmark is required")
 	private String landmark;
-	
-	@NotBlank(message = "City is required")
 	private String city;
-	
-	@NotBlank(message = "State is required")
 	private String state;
 	
-	// PIN code must be a valid 6-digit number and cannot be empty
-	@NotBlank(message = "PIN code is required")
+	// PIN code must be a valid 6-digit number
 	@Pattern(regexp = "[1-9][0-9]{5}", message = "Invalid PIN code")
 	private String pin;
 	
