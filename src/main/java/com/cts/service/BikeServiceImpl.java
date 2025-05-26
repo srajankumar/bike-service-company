@@ -101,6 +101,7 @@ public class BikeServiceImpl implements BikeService {
 			customerDto.setCity(bike.getCustomer().getCity());
 			customerDto.setState(bike.getCustomer().getState());
 			customerDto.setPin(bike.getCustomer().getPin());
+			
 			bikeDto.setCustomer(customerDto);
 		}
 
@@ -111,7 +112,6 @@ public class BikeServiceImpl implements BikeService {
 	@Override
 	public Bike addBike(BikeDto bikeDto) {
 		Bike bike = new Bike();
-
 		bike.setBikeMake(bikeDto.getBikeMake());
 		bike.setModelName(bikeDto.getModelName());
 		bike.setBikeRegistrationNumber(bikeDto.getBikeRegistrationNumber());
@@ -147,9 +147,8 @@ public class BikeServiceImpl implements BikeService {
 
 		Bike bike = bikeRepository.findById(id).get();
 
-		if (bikeDto.getBikeMake() != null) {
+		if (bikeDto.getBikeMake() != null) 
 			bike.setBikeMake(bikeDto.getBikeMake());
-		}
 		if (bikeDto.getModelName() != null)
 			bike.setModelName(bikeDto.getModelName());
 		if (bikeDto.getBikeRegistrationNumber() != null)
@@ -170,25 +169,18 @@ public class BikeServiceImpl implements BikeService {
 
 			if (bikeDto.getCustomer().getCustomerName() != null)
 				customer.setCustomerName(bikeDto.getCustomer().getCustomerName());
-
 			if (bikeDto.getCustomer().getPhoneNumber() != null)
 				customer.setPhoneNumber(bikeDto.getCustomer().getPhoneNumber());
-
 			if (bikeDto.getCustomer().getHouseNo() != null)
 				customer.setHouseNo(bikeDto.getCustomer().getHouseNo());
-
 			if (bikeDto.getCustomer().getStreet() != null)
 				customer.setStreet(bikeDto.getCustomer().getStreet());
-
 			if (bikeDto.getCustomer().getLandmark() != null)
 				customer.setLandmark(bikeDto.getCustomer().getLandmark());
-
 			if (bikeDto.getCustomer().getCity() != null)
 				customer.setCity(bikeDto.getCustomer().getCity());
-
 			if (bikeDto.getCustomer().getState() != null)
 				customer.setState(bikeDto.getCustomer().getState());
-
 			if (bikeDto.getCustomer().getPin() != null)
 				customer.setPin(bikeDto.getCustomer().getPin());
 

@@ -2,9 +2,6 @@ package com.cts.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-
-import com.cts.entities.Customer;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;

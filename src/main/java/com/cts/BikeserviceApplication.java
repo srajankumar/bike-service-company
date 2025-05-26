@@ -23,7 +23,8 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 		type = SecuritySchemeType.HTTP, 
 		scheme = "bearer", 
 		bearerFormat = "JWT", // Optional, for documentation purposes
-		description = "JWT authentication using a Bearer token")
+		description = "JWT authentication using a Bearer token"
+)
 
 // This is the main class that starts the Bike Service application
 @SpringBootApplication

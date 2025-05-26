@@ -18,7 +18,7 @@ public class AuthController {
 
 	@Autowired
 	private AuthService authService;
-	
+
 	// Logs in a user and returns a JWT token
 	@PostMapping("/login")
 	public ResponseEntity<AuthResponse> login(@RequestBody LoginDto loginDto){

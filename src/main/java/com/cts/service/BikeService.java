@@ -11,6 +11,6 @@ public interface BikeService {
 	List<BikeDto> getAll();
 	BikeDto getById(long id);
 	Bike addBike(BikeDto bikeDto);
-    Bike updateBike(long id, BikeDto bike);
+    Bike updateBike(long id, BikeDto bikeDto);
     void deleteBike(long id);
 }
