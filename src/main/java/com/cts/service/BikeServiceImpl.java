@@ -109,7 +109,7 @@ public class BikeServiceImpl implements BikeService {
 		bike.setCost(bikeDto.getCost());
 		bike.setGivenDate(bikeDto.getGivenDate());
 		bike.setExpectedDeliveryDate(bikeDto.getExpectedDeliveryDate());
-		bike.setCreatedDateAndTime(bikeDto.getCreatedDateAndTime());
+		bike.setCreatedDateAndTime(LocalDateTime.now());
 		bike.setUpdatedDateAndTime(LocalDateTime.now());
 
 		Customer customer = new Customer();
@@ -148,6 +148,8 @@ public class BikeServiceImpl implements BikeService {
 			bike.setKnownIssues(bikeDto.getKnownIssues());
 		if (bikeDto.getCost() != 0)
 			bike.setCost(bikeDto.getCost());
+		if(bikeDto.getGivenDate() != null)
+			bike.setGivenDate(bikeDto.getGivenDate());
 		if (bikeDto.getExpectedDeliveryDate() != null)
 			bike.setExpectedDeliveryDate(bikeDto.getExpectedDeliveryDate());
 

@@ -8,6 +8,7 @@ import com.cts.validation.Update;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -45,8 +46,12 @@ public class BikeDto {
 	@Positive(message = "Cost must be a positive number", groups = {Create.class, Update.class})
 	private double cost;
 	
+	@NotNull(message = "Given date field is required", groups = Create.class)
 	private LocalDateTime givenDate;
+	
+	@NotNull(message = "Expected delivery date field is required", groups = Create.class)
 	private LocalDate expectedDeliveryDate;
+	
 	private LocalDateTime createdDateAndTime;
 	private LocalDateTime updatedDateAndTime;
 	
