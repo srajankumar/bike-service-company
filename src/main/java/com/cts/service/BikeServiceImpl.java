@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import com.cts.dto.BikeDto;
-import com.cts.dto.BikeUpdateDto;
 import com.cts.entities.Bike;
 import com.cts.entities.Customer;
 import com.cts.dto.CustomerDto;
@@ -130,49 +129,49 @@ public class BikeServiceImpl implements BikeService {
 
 	// Update bike details
 	@Override
-	public Bike updateBike(long id, BikeUpdateDto bikeUpdateDto) {
+	public Bike updateBike(long id, BikeDto bikeDto) {
 		if (!bikeRepository.existsById(id)) {
 			throw new BikeNotFoundException("Bike with id: " + id + " not found");
 		}
 
 		Bike bike = bikeRepository.findById(id).get();
 
-		if (bikeUpdateDto.getBikeMake() != null) 
-			bike.setBikeMake(bikeUpdateDto.getBikeMake());
-		if (bikeUpdateDto.getModelName() != null)
-			bike.setModelName(bikeUpdateDto.getModelName());
-		if (bikeUpdateDto.getBikeRegistrationNumber() != null)
-			bike.setBikeRegistrationNumber(bikeUpdateDto.getBikeRegistrationNumber());
-		if (bikeUpdateDto.getBikeChassisNumber() != null)
-			bike.setBikeChassisNumber(bikeUpdateDto.getBikeChassisNumber());
-		if (bikeUpdateDto.getKnownIssues() != null)
-			bike.setKnownIssues(bikeUpdateDto.getKnownIssues());
-		if (bikeUpdateDto.getCost() != 0)
-			bike.setCost(bikeUpdateDto.getCost());
-		if (bikeUpdateDto.getExpectedDeliveryDate() != null)
-			bike.setExpectedDeliveryDate(bikeUpdateDto.getExpectedDeliveryDate());
+		if (bikeDto.getBikeMake() != null) 
+			bike.setBikeMake(bikeDto.getBikeMake());
+		if (bikeDto.getModelName() != null)
+			bike.setModelName(bikeDto.getModelName());
+		if (bikeDto.getBikeRegistrationNumber() != null)
+			bike.setBikeRegistrationNumber(bikeDto.getBikeRegistrationNumber());
+		if (bikeDto.getBikeChassisNumber() != null)
+			bike.setBikeChassisNumber(bikeDto.getBikeChassisNumber());
+		if (bikeDto.getKnownIssues() != null)
+			bike.setKnownIssues(bikeDto.getKnownIssues());
+		if (bikeDto.getCost() != 0)
+			bike.setCost(bikeDto.getCost());
+		if (bikeDto.getExpectedDeliveryDate() != null)
+			bike.setExpectedDeliveryDate(bikeDto.getExpectedDeliveryDate());
 
 		bike.setUpdatedDateAndTime(LocalDateTime.now());
 
 		if (bike.getCustomer() != null) {
 			Customer customer = bike.getCustomer();
 
-			if (bikeUpdateDto.getCustomer().getCustomerName() != null)
-				customer.setCustomerName(bikeUpdateDto.getCustomer().getCustomerName());
-			if (bikeUpdateDto.getCustomer().getPhoneNumber() != null)
-				customer.setPhoneNumber(bikeUpdateDto.getCustomer().getPhoneNumber());
-			if (bikeUpdateDto.getCustomer().getHouseNo() != null)
-				customer.setHouseNo(bikeUpdateDto.getCustomer().getHouseNo());
-			if (bikeUpdateDto.getCustomer().getStreet() != null)
-				customer.setStreet(bikeUpdateDto.getCustomer().getStreet());
-			if (bikeUpdateDto.getCustomer().getLandmark() != null)
-				customer.setLandmark(bikeUpdateDto.getCustomer().getLandmark());
-			if (bikeUpdateDto.getCustomer().getCity() != null)
-				customer.setCity(bikeUpdateDto.getCustomer().getCity());
-			if (bikeUpdateDto.getCustomer().getState() != null)
-				customer.setState(bikeUpdateDto.getCustomer().getState());
-			if (bikeUpdateDto.getCustomer().getPin() != null)
-				customer.setPin(bikeUpdateDto.getCustomer().getPin());
+			if (bikeDto.getCustomer().getCustomerName() != null)
+				customer.setCustomerName(bikeDto.getCustomer().getCustomerName());
+			if (bikeDto.getCustomer().getPhoneNumber() != null)
+				customer.setPhoneNumber(bikeDto.getCustomer().getPhoneNumber());
+			if (bikeDto.getCustomer().getHouseNo() != null)
+				customer.setHouseNo(bikeDto.getCustomer().getHouseNo());
+			if (bikeDto.getCustomer().getStreet() != null)
+				customer.setStreet(bikeDto.getCustomer().getStreet());
+			if (bikeDto.getCustomer().getLandmark() != null)
+				customer.setLandmark(bikeDto.getCustomer().getLandmark());
+			if (bikeDto.getCustomer().getCity() != null)
+				customer.setCity(bikeDto.getCustomer().getCity());
+			if (bikeDto.getCustomer().getState() != null)
+				customer.setState(bikeDto.getCustomer().getState());
+			if (bikeDto.getCustomer().getPin() != null)
+				customer.setPin(bikeDto.getCustomer().getPin());
 
 			bike.setCustomer(customer);
 		}

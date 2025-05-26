@@ -1,7 +1,6 @@
 package com.cts.controller;
 
 import com.cts.dto.BikeDto;
-import com.cts.dto.BikeUpdateDto;
 import com.cts.entities.Bike;
 import com.cts.entities.Customer;
 import com.cts.service.BikeService;
@@ -112,7 +111,7 @@ class BikeControllerTest {
     @DisplayName("Update Bike")
     @WithMockUser(roles = "ADMIN")
     void testUpdateBike() throws Exception {
-        when(bikeService.updateBike(eq(1L), any(BikeUpdateDto.class))).thenReturn(bikeEntity);
+        when(bikeService.updateBike(eq(1L), any(BikeDto.class))).thenReturn(bikeEntity);
 
         var json = objectMapper.writeValueAsString(bike1);
 

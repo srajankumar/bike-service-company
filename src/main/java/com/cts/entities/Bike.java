@@ -36,6 +36,7 @@ public class Bike {
 	private LocalDate expectedDeliveryDate;
 	private LocalDateTime createdDateAndTime;
 	private LocalDateTime updatedDateAndTime;
+	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "customer_id")
 	private Customer customer;

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,11 +16,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cts.dto.BikeDto;
-import com.cts.dto.BikeUpdateDto;
 import com.cts.entities.Bike;
 import com.cts.service.BikeService;
+import com.cts.validation.Create;
+import com.cts.validation.Update;
 
-import jakarta.validation.Valid;
 
 // Handles bike-related operations like getting, adding, updating, and deleting bikes
 @RestController
@@ -49,7 +50,7 @@ public class BikeController {
 	// Save new bike details
 	@PreAuthorize("hasRole('ADMIN')")
 	@PostMapping("/save")
-	public ResponseEntity<Bike> addBike(@Valid @RequestBody BikeDto bikeDto) {
+	public ResponseEntity<Bike> addBike(@Validated(Create.class) @RequestBody BikeDto bikeDto) {
 	    if (bikeDto == null || bikeDto.getCustomer() == null) {
 	        return ResponseEntity.badRequest().build();
 	    }
@@ -61,12 +62,13 @@ public class BikeController {
 	// Update existing bike details
 	@PreAuthorize("hasRole('ADMIN')")
 	@PutMapping("/{id}")
-	public ResponseEntity<Bike> updateBike(@PathVariable long id, @Valid @RequestBody BikeUpdateDto bikeUpdateDto) {
-	    if (bikeUpdateDto == null) {
+	public ResponseEntity<Bike> updateBike(@PathVariable long id, @Validated(Update.class) @RequestBody BikeDto bikeDto) {
+	    if (bikeDto == null) {
 	        return ResponseEntity.badRequest().build();
 	    }
 
-	    Bike updatedBike = bikeService.updateBike(id, bikeUpdateDto);
+	    Bike updatedBike = bikeService.updateBike(id, bikeDto);
+
 	    return ResponseEntity.status(HttpStatus.CREATED).body(updatedBike); // Returns 201 Created
 	}
 
