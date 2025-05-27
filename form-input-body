@@ -1,0 +1,104 @@
+{
+    "bikeMake": "Honda",
+    "modelName": "CB350",
+    "bikeRegistrationNumber": "KA15XY6789",
+    "bikeChassisNumber": "76543210987654321",
+    "knownIssues": "Brake Issue",
+    "cost": 145000,
+    "givenDate": "2025-05-15T10:30:00",
+    "expectedDeliveryDate": "2025-05-25",
+    "customer": {
+        "customerName": "Sneha R",
+        "phoneNumber": "8765432109",
+        "houseNo": "45B",
+        "street": "MG Road",
+        "landmark": "Near Mall",
+        "city": "Bangalore",
+        "state": "Karnataka",
+        "pin": "560001"
+    }
+}
+
+{
+    "bikeMake": "Yamaha",
+    "modelName": "YZF-R15 V4",
+    "bikeRegistrationNumber": "MH02AB1234",
+    "bikeChassisNumber": "12345678901234567",
+    "knownIssues": "Minor electrical glitch",
+    "cost": 195000,
+    "givenDate": "2025-06-01T09:00:00",
+    "expectedDeliveryDate": "2025-06-10",
+    "customer": {
+        "customerName": "Rahul Sharma",
+        "phoneNumber": "9876543210",
+        "houseNo": "12A",
+        "street": " Linking Road",
+        "landmark": "Near Cinema",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "pin": "400050"
+    }
+}
+
+{
+    "bikeMake": "Royal Enfield",
+    "modelName": "Classic 350",
+    "bikeRegistrationNumber": "TN07CD5678",
+    "bikeChassisNumber": "09876543210987654",
+    "knownIssues": "Rear suspension squeak",
+    "cost": 220000,
+    "givenDate": "2025-05-20T11:00:00",
+    "expectedDeliveryDate": "2025-05-30",
+    "customer": {
+        "customerName": "Priya V",
+        "phoneNumber": "7654321098",
+        "houseNo": "8F",
+        "street": "Anna Salai",
+        "landmark": "Opposite Bus Stand",
+        "city": "Chennai",
+        "state": "Tamil Nadu",
+        "pin": "600002"
+    }
+}
+
+{
+    "bikeMake": "Bajaj",
+    "modelName": "Pulsar NS200",
+    "bikeRegistrationNumber": "UP16CD7890",
+    "bikeChassisNumber": "98765432109876543",
+    "knownIssues": "Starter motor noise",
+    "cost": 160000,
+    "givenDate": "2025-07-01T14:00:00",
+    "expectedDeliveryDate": "2025-07-12",
+    "customer": {
+        "customerName": "Alok Kumar",
+        "phoneNumber": "9012345678",
+        "houseNo": "7C",
+        "street": "Civil Lines",
+        "landmark": "Near Railway Station",
+        "city": "Lucknow",
+        "state": "Uttar Pradesh",
+        "pin": "226001"
+    }
+}
+
+{
+    "bikeMake": "TVS",
+    "modelName": "Apache RTR 160",
+    "bikeRegistrationNumber": "DL04EF2345",
+    "bikeChassisNumber": "67890123456789012",
+    "knownIssues": "Minor engine vibration",
+    "cost": 130000,
+    "givenDate": "2025-06-10T11:45:00",
+    "expectedDeliveryDate": "2025-06-20",
+    "customer": {
+        "customerName": "Deepa Singh",
+        "phoneNumber": "8123456789",
+        "houseNo": "B-21",
+        "street": "Dwarka Sector 10",
+        "landmark": "Opposite Market",
+        "city": "Delhi",
+        "state": "Delhi",
+        "pin": "110075"
+    }
+}

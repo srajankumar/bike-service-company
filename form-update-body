@@ -1,0 +1,8 @@
+{
+    "bikeMake" : "Honda Civic",
+    "bikeRegistrationNumber": "KA19MA0000",
+    "cost": 150000,
+    "customer": {
+        "customerName": "Tejas"
+    }
+}

@@ -21,16 +21,12 @@ import com.cts.dto.CustomerDto;
 import com.cts.entities.Bike;
 import com.cts.entities.Customer;
 import com.cts.repository.BikeRepository;
-import com.cts.repository.CustomerRepository;
 
 @SpringBootTest
 class BikeServiceImplTest {
 
     @Mock
     private BikeRepository bikeRepository;
-
-    @Mock
-    private CustomerRepository customerRepository;
 
     @InjectMocks
     private BikeServiceImpl bikeService;
