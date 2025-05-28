@@ -1,6 +1,6 @@
-# Bike Service Management System
+# Bike Service Company Management System
 
-The Bike Service Company is a Spring Boot-based application designed to manage bike servicing efficiently. It allows customers to register their bikes, track service statuses, and interact securely using JWT authentication.
+This is a Spring Boot-based application designed to manage bike servicing efficiently. It allows customers to register their bikes, track service statuses, and interact securely using JWT authentication.
 
 ## Features
 
