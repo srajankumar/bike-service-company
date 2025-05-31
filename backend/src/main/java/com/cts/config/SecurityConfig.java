@@ -1,5 +1,7 @@
 package com.cts.config;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -73,7 +75,10 @@ public class SecurityConfig {
 	@Bean
 	CorsFilter corsFilter() {
 		CorsConfiguration config = new CorsConfiguration();
-		config.addAllowedOrigin("http://localhost:3000");
+		config.setAllowedOrigins(List.of(
+		        "http://localhost:3000",
+		        "https://bikeservicecompany.vercel.app"
+		    ));
 		config.addAllowedHeader("*");
 		config.addAllowedMethod("*");
 		config.setAllowCredentials(true);
