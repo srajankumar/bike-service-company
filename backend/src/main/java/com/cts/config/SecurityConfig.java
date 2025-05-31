@@ -12,6 +12,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
+
 import com.cts.security.JwtAccessDeniedHandler;
 import com.cts.security.JwtAuthenticationEntryPoint;
 import com.cts.security.JwtAuthenticationFilter;
@@ -21,47 +25,61 @@ import com.cts.security.JwtAuthenticationFilter;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
-	
+	private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+
 	@Autowired
 	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-	
+
 	@Autowired
 	private JwtAuthenticationFilter jwtAuthenticationFilter;
 
 	// Sets up security configurations for access control
-    SecurityConfig(JwtAccessDeniedHandler jwtAccessDeniedHandler) {
-        this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
-    }
-	
-    // Defines security rules, authentication, and exception handling
+	SecurityConfig(JwtAccessDeniedHandler jwtAccessDeniedHandler) {
+		this.jwtAccessDeniedHandler = jwtAccessDeniedHandler;
+	}
+
+	// Defines security rules, authentication, and exception handling
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		
-		http.csrf(config -> config.disable());
 
-		http.authorizeHttpRequests(auth->auth
-				.requestMatchers("/api/auth/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**")
-				.permitAll()
-				.anyRequest()
-				.authenticated())
-		.exceptionHandling(ex->ex.accessDeniedHandler(jwtAccessDeniedHandler)
-				.authenticationEntryPoint(jwtAuthenticationEntryPoint))
-		.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-		.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+		http.csrf(config -> config.disable());
 		
+		http.cors(cors -> {});
+
+		http.authorizeHttpRequests(
+				auth -> auth.requestMatchers("/api/auth/**", "/swagger-ui/**", "/swagger-ui.html", "/v3/api-docs/**")
+						.permitAll().anyRequest().authenticated())
+				.exceptionHandling(ex -> ex.accessDeniedHandler(jwtAccessDeniedHandler)
+						.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+
 		return http.build();
 	}
-	
+
 	// Manages authentication configuration
 	@Bean
 	AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
 		return config.getAuthenticationManager();
 	}
-	
+
 	// Encrypts passwords using bcrypt
 	@Bean
 	PasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder();
+	}
+
+	// Cors configuration
+	@Bean
+	CorsFilter corsFilter() {
+		CorsConfiguration config = new CorsConfiguration();
+		config.addAllowedOrigin("http://localhost:3000");
+		config.addAllowedHeader("*");
+		config.addAllowedMethod("*");
+		config.setAllowCredentials(true);
+
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", config);
+		return new CorsFilter(source);
 	}
 }

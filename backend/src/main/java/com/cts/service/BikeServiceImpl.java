@@ -109,6 +109,7 @@ public class BikeServiceImpl implements BikeService {
 		bike.setCost(bikeDto.getCost());
 		bike.setGivenDate(bikeDto.getGivenDate());
 		bike.setExpectedDeliveryDate(bikeDto.getExpectedDeliveryDate());
+		
 		bike.setCreatedDateAndTime(LocalDateTime.now());
 		bike.setUpdatedDateAndTime(LocalDateTime.now());
 
