@@ -39,11 +39,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex flex-col gap-3 min-h-dvh items-center justify-center">
-      <h2 className="text-3xl font-bold">Login</h2>
+    <div className="flex flex-col gap-5 min-h-dvh items-center justify-center">
+      <h2 className="text-2xl font-bold">Login</h2>
       <form className="grid gap-5 md:max-w-sm px-5 w-full" onSubmit={handleSubmit}>
         <div>
-          <Label className="mb-2">Username:</Label>
+          <Label className="mb-2">Username or Email</Label>
           <Input
             type="text"
             value={usernameOrEmail}
@@ -52,7 +52,7 @@ export default function LoginPage() {
           />
         </div>
         <div>
-          <Label className="mb-2">Password:</Label>
+          <Label className="mb-2">Password</Label>
           <Input
             type="password"
             value={password}

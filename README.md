@@ -95,6 +95,47 @@ This API supports partial updates. For example, to update only the `bikeMake`, `
 - MySQL
 - Postman (for testing APIs)
 
+## Database Setup
+
+1. **Create the database:**
+    ```sql
+    CREATE DATABASE bikeservice;
+    ```
+
+2. **Tables:**
+    - The following tables will be created automatically by the application:
+        - `bikes`
+        - `customers`
+        - `roles`
+        - `users`
+        - `users_roles`
+
+3. **Insert roles:**
+    ```sql
+    INSERT INTO roles (id, name) VALUES (1, 'ROLE_ADMIN'), (2, 'ROLE_USER');
+    ```
+
+4. **Insert users:**
+    - Use the `PasswordGenerator` class from the `com.cts.util` package (in the backend folder) to generate a hashed password.
+    - Insert users with the following columns: `id`, `email`, `name`, `password`, `username`.
+    - Example:
+      ```sql
+      INSERT INTO users (id, email, name, password, username) VALUES
+      (1, 'admin@example.com', 'Admin User', '<hashed_password>', 'admin'),
+      (2, 'user@example.com', 'Regular User', '<hashed_password>', 'user');
+      ```
+      Replace `<hashed_password>` with the output from the `PasswordGenerator`.
+
+5. **Map users to roles:**
+    - Use the `users_roles` table to assign roles to users.
+    - Example:
+      ```sql
+      -- Assign admin role to admin user
+      INSERT INTO users_roles (user_id, roles_id) VALUES (1, 1);
+      -- Assign user role to regular user
+      INSERT INTO users_roles (user_id, roles_id) VALUES (2, 2);
+      ```
+
 ## Steps to Run
 
 1.  Clone this repository:
