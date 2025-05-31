@@ -1,0 +1,244 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
+import Link from "next/link";
+
+export default function UpdateBikePage() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const id = searchParams.get("id");
+
+    const [form, setForm] = useState({
+        bikeMake: "",
+        modelName: "",
+        bikeRegistrationNumber: "",
+        bikeChassisNumber: "",
+        knownIssues: "",
+        cost: "",
+        givenDate: "",
+        expectedDeliveryDate: "",
+        customerName: "",
+        phoneNumber: "",
+        houseNo: "",
+        street: "",
+        landmark: "",
+        city: "",
+        state: "",
+        pin: "",
+    });
+    const [loading, setLoading] = useState(false);
+    const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+    // Fetch bike data by ID
+    useEffect(() => {
+        if (!id) return;
+        const token = localStorage.getItem("accessToken");
+        fetch(`http://localhost:8080/api/bikes/${id}`, {
+            headers: {
+                Authorization: token ? `Bearer ${token}` : "",
+            },
+        })
+            .then(async (res) => {
+                if (res.status === 401) {
+                    toast.error("Expired token. Please log in again.");
+                    localStorage.removeItem("accessToken");
+                    router.push("/login");
+                    return;
+                }
+                const data = await res.json();
+                setForm({
+                    bikeMake: data.bikeMake || "",
+                    modelName: data.modelName || "",
+                    bikeRegistrationNumber: data.bikeRegistrationNumber || "",
+                    bikeChassisNumber: data.bikeChassisNumber || "",
+                    knownIssues: data.knownIssues || "",
+                    cost: data.cost?.toString() || "",
+                    givenDate: data.givenDate ? data.givenDate.slice(0, 16) : "",
+                    expectedDeliveryDate: data.expectedDeliveryDate || "",
+                    customerName: data.customer?.customerName || "",
+                    phoneNumber: data.customer?.phoneNumber || "",
+                    houseNo: data.customer?.houseNo || "",
+                    street: data.customer?.street || "",
+                    landmark: data.customer?.landmark || "",
+                    city: data.customer?.city || "",
+                    state: data.customer?.state || "",
+                    pin: data.customer?.pin || "",
+                });
+            })
+            .catch(() => {
+                toast.error("Failed to fetch bike details.");
+            });
+    }, [id, router]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setForm({ ...form, [e.target.name]: e.target.value });
+        setErrors({ ...errors, [e.target.name]: "" });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoading(true);
+        setErrors({});
+        const token = localStorage.getItem("accessToken");
+        const body = {
+            bikeMake: form.bikeMake,
+            modelName: form.modelName,
+            bikeRegistrationNumber: form.bikeRegistrationNumber,
+            bikeChassisNumber: form.bikeChassisNumber,
+            knownIssues: form.knownIssues,
+            cost: Number(form.cost),
+            givenDate: form.givenDate,
+            expectedDeliveryDate: form.expectedDeliveryDate,
+            customer: {
+                customerName: form.customerName,
+                phoneNumber: form.phoneNumber,
+                houseNo: form.houseNo,
+                street: form.street,
+                landmark: form.landmark,
+                city: form.city,
+                state: form.state,
+                pin: form.pin,
+            },
+        };
+        try {
+            const res = await fetch(`http://localhost:8080/api/bikes/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: token ? `Bearer ${token}` : "",
+                },
+                body: JSON.stringify(body),
+            });
+
+            let data: { [key: string]: any; error?: string } = {};
+            try {
+                data = await res.json();
+            } catch {
+                data = { error: "Unexpected server error." };
+            }
+
+            if (res.ok) {
+                toast.success("Bike updated successfully!");
+                setLoading(false);
+                router.push("/");
+            } else {
+                if (res.status === 401) {
+                    toast.error("Expired token. Please log in again.");
+                    localStorage.removeItem("accessToken");
+                    router.push("/login");
+                } else if (data.error) {
+                    toast.error(data.error);
+                }
+                setErrors(data);
+                setLoading(false);
+            }
+        } catch (err: any) {
+            toast.error("Network error. Please try again.");
+            setLoading(false);
+        }
+    };
+
+    return (
+        <div className="max-w-5xl mx-auto px-5 pb-20">
+            <div className="flex justify-between py-10">
+                <h1 className="text-xl font-bold underline decoration-wavy underline-offset-8 decoration-primary">Update</h1>
+                <div className="flex flex-wrap gap-3">
+                    <Link href={'/'}>
+                        <Button>Back</Button>
+                    </Link>
+                </div>
+            </div>
+            <form className="grid gap-5" onSubmit={handleSubmit}>
+                <div>
+                    <Label className="mb-2">Bike Make</Label>
+                    <Input name="bikeMake" value={form.bikeMake} onChange={handleChange} required />
+                    {errors.bikeMake && <p className="text-red-500 text-sm">{errors.bikeMake}</p>}
+                </div>
+                <div>
+                    <Label className="mb-2">Model Name</Label>
+                    <Input name="modelName" value={form.modelName} onChange={handleChange} required />
+                    {errors.modelName && <p className="text-red-500 text-sm">{errors.modelName}</p>}
+                </div>
+                <div>
+                    <Label className="mb-2">Registration Number</Label>
+                    <Input name="bikeRegistrationNumber" value={form.bikeRegistrationNumber} onChange={handleChange} required />
+                    {errors.bikeRegistrationNumber && <p className="text-red-500 text-sm">{errors.bikeRegistrationNumber}</p>}
+                </div>
+                <div>
+                    <Label className="mb-2">Chassis Number</Label>
+                    <Input name="bikeChassisNumber" value={form.bikeChassisNumber} onChange={handleChange} required />
+                    {errors.bikeChassisNumber && <p className="text-red-500 text-sm">{errors.bikeChassisNumber}</p>}
+                </div>
+                <div>
+                    <Label className="mb-2">Known Issues</Label>
+                    <Input name="knownIssues" value={form.knownIssues} onChange={handleChange} required />
+                    {errors.knownIssues && <p className="text-red-500 text-sm">{errors.knownIssues}</p>}
+                </div>
+                <div>
+                    <Label className="mb-2">Cost</Label>
+                    <Input name="cost" type="number" value={form.cost} onChange={handleChange} required />
+                    {errors.cost && <p className="text-red-500 text-sm">{errors.cost}</p>}
+                </div>
+                <div>
+                    <Label className="mb-2">Given Date</Label>
+                    <Input name="givenDate" type="datetime-local" value={form.givenDate} onChange={handleChange} required />
+                    {errors.givenDate && <p className="text-red-500 text-sm">{errors.givenDate}</p>}
+                </div>
+                <div>
+                    <Label className="mb-2">Expected Delivery Date</Label>
+                    <Input name="expectedDeliveryDate" type="date" value={form.expectedDeliveryDate} onChange={handleChange} required />
+                    {errors.expectedDeliveryDate && <p className="text-red-500 text-sm">{errors.expectedDeliveryDate}</p>}
+                </div>
+                <div className="font-semibold my-2 underline decoration-wavy underline-offset-4 decoration-primary">Customer Details</div>
+                <div>
+                    <Label className="mb-2">Name</Label>
+                    <Input name="customerName" value={form.customerName} onChange={handleChange} required />
+                    {errors.customerName && <p className="text-red-500 text-sm">{errors.customerName}</p>}
+                </div>
+                <div>
+                    <Label className="mb-2">Phone Number</Label>
+                    <Input name="phoneNumber" value={form.phoneNumber} onChange={handleChange} required />
+                    {errors.phoneNumber && <p className="text-red-500 text-sm">{errors.phoneNumber}</p>}
+                </div>
+                <div>
+                    <Label className="mb-2">House No</Label>
+                    <Input name="houseNo" value={form.houseNo} onChange={handleChange} required />
+                    {errors.houseNo && <p className="text-red-500 text-sm">{errors.houseNo}</p>}
+                </div>
+                <div>
+                    <Label className="mb-2">Street</Label>
+                    <Input name="street" value={form.street} onChange={handleChange} required />
+                    {errors.street && <p className="text-red-500 text-sm">{errors.street}</p>}
+                </div>
+                <div>
+                    <Label className="mb-2">Landmark</Label>
+                    <Input name="landmark" value={form.landmark} onChange={handleChange} required />
+                    {errors.landmark && <p className="text-red-500 text-sm">{errors.landmark}</p>}
+                </div>
+                <div>
+                    <Label className="mb-2">City</Label>
+                    <Input name="city" value={form.city} onChange={handleChange} required />
+                    {errors.city && <p className="text-red-500 text-sm">{errors.city}</p>}
+                </div>
+                <div>
+                    <Label className="mb-2">State</Label>
+                    <Input name="state" value={form.state} onChange={handleChange} required />
+                    {errors.state && <p className="text-red-500 text-sm">{errors.state}</p>}
+                </div>
+                <div>
+                    <Label className="mb-2">Pin</Label>
+                    <Input name="pin" value={form.pin} onChange={handleChange} required />
+                    {errors.pin && <p className="text-red-500 text-sm">{errors.pin}</p>}
+                </div>
+                <Button type="submit" disabled={loading}>
+                    {loading ? "Updating..." : "Update Bike"}
+                </Button>
+            </form>
+        </div>
+    );
+}
