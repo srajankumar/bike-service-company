@@ -62,7 +62,7 @@ type Bike = {
   customer: Customer;
 };
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 6;
 
 export default function GetAll() {
   const [selectedBike, setSelectedBike] = useState<Bike | null>(null);
@@ -86,19 +86,19 @@ export default function GetAll() {
         },
       });
       if (res.status === 401) {
-        toast.error("Expired token. Please log in again.");
+        toast.error("Expired token");
         localStorage.removeItem("accessToken");
         router.push("/login");
         return;
       }
       if (res.ok) {
         setBikes((prev) => prev.filter((b) => b.bikeId !== bikeId));
-        toast.success("Bike deleted successfully.");
+        toast.success("Bike deleted successfully");
       } else {
         toast.error("Failed to delete bike.");
       }
     } catch {
-      toast.error("Network error. Please try again.");
+      toast.error("Network error");
     }
   };
 

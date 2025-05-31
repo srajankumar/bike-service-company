@@ -1,15 +1,17 @@
-# Bike Service Company Management System
+<div align="center">
+  <img src="/assets/header.png" alt="header"/>
+</div>
 
 This is a Spring Boot-based application designed to manage bike servicing efficiently. It allows customers to register their bikes, track service statuses, and interact securely using JWT authentication.
 
 ## Features
 
-  - User Authentication (JWT)
-  - Role-Based Access Control (Admin & Customer)
-  - Bike Management (CRUD Operations)
-  - Exception Handling
-  - Unit Testing (JUnit & Mockito)
-  - API Documentation with Swagger
+- User Authentication (JWT)
+- Role-Based Access Control (Admin & Customer)
+- Bike Management (CRUD Operations)
+- Exception Handling
+- Unit Testing (JUnit & Mockito)
+- API Documentation with Swagger
 
 ## Technology Stacks
 
@@ -29,19 +31,19 @@ This is a Spring Boot-based application designed to manage bike servicing effici
 
 ### Authentication
 
-| Method | Endpoint | Description |
-|--------|---------|-------------|
+| Method | Endpoint          | Description                            |
+| ------ | ----------------- | -------------------------------------- |
 | `POST` | `/api/auth/login` | Logs in a user and generates JWT token |
 
 ### Bike Operations
 
-| Method | Endpoint | Description |
-|--------|---------|-------------|
-| `POST` | `/api/bikes/save` | Adds a new bike |
-| `GET` | `/api/bikes` | Retrieves all bikes |
-| `GET` | `/api/bikes/{id}` | Gets bike details by ID |
-| `PUT` | `/api/bikes/{id}` | Updates an existing bike |
-| `DELETE` | `/api/bikes/{id}` | Deletes a bike |
+| Method   | Endpoint          | Description              |
+| -------- | ----------------- | ------------------------ |
+| `POST`   | `/api/bikes/save` | Adds a new bike          |
+| `GET`    | `/api/bikes`      | Retrieves all bikes      |
+| `GET`    | `/api/bikes/{id}` | Gets bike details by ID  |
+| `PUT`    | `/api/bikes/{id}` | Updates an existing bike |
+| `DELETE` | `/api/bikes/{id}` | Deletes a bike           |
 
 ### Example Request Body for Adding/Updating a Bike:
 
@@ -86,10 +88,10 @@ This API supports partial updates. For example, to update only the `bikeMake`, `
 
 ## Prerequisites
 
-  - Java 17+
-  - Maven
-  - MySQL
-  - Postman (for testing APIs)
+- Java 17+
+- Maven
+- MySQL
+- Postman (for testing APIs)
 
 ## Steps to Run
 
@@ -97,6 +99,7 @@ This API supports partial updates. For example, to update only the `bikeMake`, `
     ```sh
     git clone https://github.com/srajankumar/bike-service-company.git
     cd bike-service-company
+    cd backend
     ```
 2.  Configure database in `application.properties`.
 3.  Install dependencies & build:
@@ -111,3 +114,9 @@ This API supports partial updates. For example, to update only the `bikeMake`, `
     ```sh
     http://localhost:8080/swagger-ui/index.html
     ```
+
+## Mockup
+
+<div align="center">
+  <img src="/assets/mockup.png" alt="mockup"/>
+</div>
