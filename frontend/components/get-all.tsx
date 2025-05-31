@@ -19,6 +19,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { Skeleton } from "@/components/ui/skeleton"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
@@ -123,7 +124,6 @@ export default function GetAll() {
   }, []);
 
   useEffect(() => {
-    // Filter bikes by search (case-insensitive, checks make, model, reg no, customer name)
     const s = search.trim().toLowerCase();
     if (!s) {
       setFiltered(bikes);
@@ -138,13 +138,60 @@ export default function GetAll() {
         )
       );
     }
-    setPage(1); // Reset to first page on search
+    setPage(1);
   }, [search, bikes]);
 
   const totalPages = Math.ceil(filtered.length / PAGE_SIZE);
   const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return
+  <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-5 mb-5">
+      <Input
+        placeholder="Search by make, model, reg. no, or customer"
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+      />
+    </div>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>ID</TableHead>
+          <TableHead>Make</TableHead>
+          <TableHead>Model</TableHead>
+          <TableHead>Reg. No.</TableHead>
+          <TableHead>Customer</TableHead>
+          <TableHead>Known Issues</TableHead>
+          <TableHead>Cost</TableHead>
+          <TableHead>Given Date</TableHead>
+          <TableHead>Expected Delivery</TableHead>
+          <TableHead className="text-center">Action</TableHead>
+        </TableRow>
+      </TableHeader>
+    </Table>
+    <Skeleton className="h-10 w-full my-2" />
+    <Skeleton className="h-10 w-full my-2" />
+    <Skeleton className="h-10 w-full my-2" />
+    <Skeleton className="h-10 w-full my-2" />
+    <Skeleton className="h-10 w-full my-2" />
+    <div className="flex items-center justify-between mt-5">
+      <Button
+        disabled
+        variant="outline"
+      >
+        Previous
+      </Button>
+      <span className="text-sm text-muted-foreground">
+        Page 1 of 1
+      </span>
+      <Button
+        disabled
+        variant="outline"
+      >
+        Next
+      </Button>
+    </div>
+  </Dialog>;
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
@@ -167,7 +214,7 @@ export default function GetAll() {
             <TableHead>Cost</TableHead>
             <TableHead>Given Date</TableHead>
             <TableHead>Expected Delivery</TableHead>
-            <TableHead>Action</TableHead>
+            <TableHead className="text-center">Action</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

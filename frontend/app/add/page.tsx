@@ -75,7 +75,7 @@ export default function AddBikePage() {
       try {
         data = await res.json();
       } catch {
-        data = { error: "Unexpected server error." };
+        data = { error: "Unexpected server error" };
       }
 
       if (res.ok) {
@@ -83,9 +83,9 @@ export default function AddBikePage() {
         router.push("/");
       } else {
         if (res.status === 401) {
-          toast.error("Expired token. Please log in again.");
+          toast.error("Expired token");
           localStorage.removeItem("accessToken");
-          router.push("/login"); // <-- redirect to login on expired token
+          router.push("/login");
         } else if (data.error) {
           toast.error(data.error);
         }
@@ -93,13 +93,13 @@ export default function AddBikePage() {
         setLoading(false);
       }
     } catch (err: any) {
-      toast.error("Network error. Please try again.");
+      toast.error("Network error");
       setLoading(false);
     }
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-5 pb-20">
+    <div className="max-w-6xl mx-auto px-5 pb-20">
       <div className="flex justify-between py-10">
         <h1 className="text-xl font-bold underline decoration-wavy underline-offset-8 decoration-primary">Add New</h1>
         <div className="flex flex-wrap gap-3">
@@ -223,7 +223,7 @@ export default function AddBikePage() {
           )}
         </div>
         <Button type="submit" disabled={loading}>
-          {loading ? "Adding..." : "Add Bike"}
+          Add {loading && (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2A10 10 0 1 0 22 12A10 10 0 0 0 12 2Zm0 18a8 8 0 1 1 8-8A8 8 0 0 1 12 20Z" opacity="0.5" /><path fill="currentColor" d="M20 12h2A10 10 0 0 0 12 2V4A8 8 0 0 1 20 12Z"><animateTransform attributeName="transform" dur="1s" from="0 12 12" repeatCount="indefinite" to="360 12 12" type="rotate" /></path></svg>)}
         </Button>
       </form>
     </div>

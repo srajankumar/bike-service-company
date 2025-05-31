@@ -18,16 +18,13 @@ export default function Home() {
   }, [router]);
 
   return (
-    <div className="max-w-5xl mx-auto px-5 pb-20">
+    <div className="max-w-6xl mx-auto px-5 pb-20">
       <div className="flex gap-5 justify-between py-10">
         <h1 className="text-xl font-bold underline decoration-wavy underline-offset-8 decoration-primary">Bike Service Company</h1>
         <div className="flex flex-wrap gap-3">
           <Link href={'/add'}>
             <Button><Plus /></Button>
           </Link>
-          {/* <Link href={'/login'}>
-            <Button>Login</Button>
-          </Link> */}
         </div>
       </div>
       <GetAll />
