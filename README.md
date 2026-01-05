@@ -142,7 +142,6 @@ This API supports partial updates. For example, to update only the `bikeMake`, `
     ```sh
     git clone https://github.com/srajankumar/bike-service-company.git
     cd bike-service-company
-    cd api
     ```
 2.  Configure `application.properties`.
 3.  Install dependencies & build:
