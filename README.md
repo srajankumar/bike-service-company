@@ -91,6 +91,8 @@ This API supports partial updates. For example, to update only the `bikeMake`, `
 - MySQL
 - Postman (for testing APIs)
 
+> Note: If you are using Eclipse IDE, you must install the Lombok plugin for the project to compile correctly.
+
 ## Database Setup
 
 1. **Create the database:**
@@ -144,6 +146,14 @@ This API supports partial updates. For example, to update only the `bikeMake`, `
     cd bike-service-company
     ```
 2.  Configure `application.properties`.
+    Update the database credentials and security settings.
+
+    > **Note:** If you need to generate a secure random **JWT secret key**, you can quickly do so using Node.js with the following command:
+
+    > ```sh
+    > node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
+    > ```
+
 3.  Install dependencies & build:
     ```sh
     mvn clean install
