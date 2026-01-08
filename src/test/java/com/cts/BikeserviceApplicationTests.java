@@ -6,7 +6,6 @@ import com.cts.entities.Bike;
 import com.cts.entities.Customer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,7 +55,6 @@ class BikeserviceApplicationTests {
 		bikeTestRepository.save(bike);
 	}
 
-	@Disabled
 	// Integration Test: Get all bikes from H2
 	@Test
 	@DisplayName("Get all bikes")
@@ -66,7 +64,6 @@ class BikeserviceApplicationTests {
 				.andExpect(jsonPath("$", hasSize(bikeTestRepository.findAll().size())));
 	}
 
-	@Disabled
 	// Integration Test: Get bike by ID from H2 - Success
 	@Test
 	@DisplayName("Get bike by ID - Success")
@@ -90,7 +87,6 @@ class BikeserviceApplicationTests {
 				.andExpect(jsonPath("$.bikeRegistrationNumber").value("KA19MA1234"));
 	}
 
-	@Disabled
 	// Integration Test: Get bike by ID from H2 - Not Found
 	@Test
 	@DisplayName("Get bike by ID - Not Found")
@@ -99,7 +95,6 @@ class BikeserviceApplicationTests {
 		mockMvc.perform(get("/api/bikes/999")).andExpect(status().isNotFound());
 	}
 
-	@Disabled
 	// Integration Test: Delete bike from H2
 	@Test
 	@DisplayName("Delete bike from H2")
@@ -112,7 +107,6 @@ class BikeserviceApplicationTests {
 		mockMvc.perform(get("/api/bikes")).andExpect(status().isOk()).andExpect(jsonPath("$", hasSize(0)));
 	}
 
-	@Disabled
 	// Integration Test: Add bike to H2
 	@Test
 	@DisplayName("Add bike")
