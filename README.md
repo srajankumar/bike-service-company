@@ -8,7 +8,8 @@ This is a Spring Boot API designed to manage bike servicing efficiently. It allo
 - Role-Based Access Control (Admin & Customer)
 - Bike Management (CRUD Operations)
 - Exception Handling
-- Unit Testing (JUnit & Mockito)
+- Unit Tests (JUnit & Mockito)
+- Integration Tests (H2 Database)
 - API Documentation with Swagger
 
 ## Technology Stacks
@@ -22,6 +23,7 @@ This is a Spring Boot API designed to manage bike servicing efficiently. It allo
 ![JUnit](https://img.shields.io/badge/JUnit-%2325A162.svg?style=for-the-badge&logo=junit5&logoColor=white)
 ![Mockito](https://img.shields.io/badge/Mockito-%2300A7E0.svg?style=for-the-badge&logo=mockito&logoColor=white)
 ![MockMvc](https://img.shields.io/badge/MockMvc-%23404D59.svg?style=for-the-badge&logo=spring&logoColor=white)
+![H2 Database](https://img.shields.io/badge/H2%20Database-%23004B8D.svg?style=for-the-badge&logo=databricks&logoColor=white)
 ![Swagger](https://img.shields.io/badge/Swagger-%2388C100.svg?style=for-the-badge&logo=swagger&logoColor=white)
 ![Postman](https://img.shields.io/badge/Postman-%23FF6C37.svg?style=for-the-badge&logo=postman&logoColor=white)
 
