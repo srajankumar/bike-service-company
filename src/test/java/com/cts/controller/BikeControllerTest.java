@@ -68,7 +68,7 @@ class BikeControllerTest {
 
     // Test: Get all bikes
     @Test
-    @DisplayName("Get All Bikes")
+    @DisplayName("Get all bikes")
     @WithMockUser
     void testGetAllBikes() throws Exception {
         when(bikeService.getAll()).thenReturn(List.of(bike1, bike2));
@@ -81,7 +81,7 @@ class BikeControllerTest {
 
     // Test: Get bike by ID
     @Test
-    @DisplayName("Get Bike By ID")
+    @DisplayName("Get bike by ID")
     @WithMockUser
     void testGetBikeById() throws Exception {
         when(bikeService.getById(1L)).thenReturn(bike1);
@@ -91,9 +91,9 @@ class BikeControllerTest {
                 .andExpect(jsonPath("$.bikeMake").value("Honda"));
     }
 
-    // Test: Save new bike
+    // Test: Save bike
     @Test
-    @DisplayName("Save Bike")
+    @DisplayName("Save bike")
     @WithMockUser(roles = "ADMIN")
     void testSaveBike() throws Exception {
         when(bikeService.addBike(any(BikeDto.class))).thenReturn(bikeEntity);
@@ -106,9 +106,9 @@ class BikeControllerTest {
                 .andExpect(status().isCreated());
     }
 
-    // Test: Update existing bike
+    // Test: Update bike
     @Test
-    @DisplayName("Update Bike")
+    @DisplayName("Update bike")
     @WithMockUser(roles = "ADMIN")
     void testUpdateBike() throws Exception {
         when(bikeService.updateBike(eq(1L), any(BikeDto.class))).thenReturn(bikeEntity);
@@ -122,9 +122,9 @@ class BikeControllerTest {
                 .andExpect(jsonPath("$.bikeMake").value("Honda"));
     }
 
-    // Test: Delete bike by ID
+    // Test: Delete bike
     @Test
-    @DisplayName("Delete Bike")
+    @DisplayName("Delete bike")
     @WithMockUser(roles = "ADMIN")
     void testDeleteBike() throws Exception {
         doNothing().when(bikeService).deleteBike(1L);
