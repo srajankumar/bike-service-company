@@ -14,7 +14,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.cts.dto.BikeDto;
 import com.cts.dto.CustomerDto;
@@ -22,7 +23,7 @@ import com.cts.entities.Bike;
 import com.cts.entities.Customer;
 import com.cts.repository.BikeRepository;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class BikeServiceImplTest {
 
 	@Mock
@@ -109,7 +110,7 @@ class BikeServiceImplTest {
 		verify(bikeRepository, times(1)).save(any(Bike.class));
 	}
 
-	// Test: Update bike
+// Test: Update bike
 	@Test
 	@DisplayName("Update bike")
 	void testUpdateBike() {
